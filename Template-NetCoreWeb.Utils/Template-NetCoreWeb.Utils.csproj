@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Template_NetCoreWeb.Utils</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TEC_Core_Standard_Library" Version="1.2.7" />
+    <PackageReference Include="TEC_Core_Web_Standard_Library" Version="1.1.14" />
+  </ItemGroup>
+
+</Project>
