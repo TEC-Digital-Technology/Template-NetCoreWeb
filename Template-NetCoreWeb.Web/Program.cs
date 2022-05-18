@@ -17,7 +17,6 @@ var app = builder.Build();
 #region TEC
 app.ConfigureHttpContext();
 app.ConfigureLogging(options => Template_NetCoreWeb.WebMvc.StartupConfig.LoggingConfig.ConfigureBasicLogging(options));
-//app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder => appBuilder.ConfigureLogging(options => Template_NetCoreWeb.WebMvc.StartupConfig.LoggingConfig.ConfigureApiLogging(options)));
 #endregion
 if (!app.Environment.IsDevelopment())
 {
