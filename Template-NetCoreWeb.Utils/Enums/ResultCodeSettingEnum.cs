@@ -41,7 +41,7 @@ namespace Template_NetCoreWeb.Utils.Enums
         [EnumDescription("1001")]
         InvalidRange,
         /// <summary>
-        /// 值區間不符規定
+        /// 必須要有至少一個元素
         /// </summary>
         [EnumDescription("1002")]
         ItemRequired,

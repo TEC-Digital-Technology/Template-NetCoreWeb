@@ -12,8 +12,8 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         /// <summary>
         /// 設定記錄行為
         /// </summary>
-        /// <param name="options">用於<see cref="TEC.Core.Web.Mvc.Logging.Filters.LogRequestFilter"/>的參數設定</param>
-        internal static void ConfigureMvcLogging(TEC.Core.Web.Mvc.Logging.Filters.LogRequestResponseFilterOptions options)
+        /// <param name="options">用於<see cref="TEC.Core.Web.Logging.Filters.LogRequestFilter"/>的參數設定</param>
+        internal static void ConfigureLogging(TEC.Core.Web.Logging.Filters.LogRequestResponseFilterOptions options)
         {
             options.LogAspNetActionExecutingAction = (loggerFactory, data) =>
             {
@@ -25,10 +25,10 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
                     Exception = null,
                     IPAddress = data.IPAddress,
                     LoggingTriggerType = data.LoggingTriggerType ?? LoggingTriggerType.User,
-                    LogLevel = LogLevel.Debug,
-                    Message = $"執行請求-{data.ActionDisplayName}",
+                    LogLevel = LogLevel.Information,
+                    Message = $"執行請求",
                     MessageType = LoggingMessageType.MvcRequest,
-                    Resource = data.ActionDisplayName,
+                    Resource = $"{data.ControllerName}.{data.ActionName}",
                     Scope = LoggingScope.FrontEnd,
                     SystemScope = LoggingSystemScope.Local,
                     TriggerReferenceId = data.TriggerReferenceID
@@ -44,10 +44,10 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
                     Exception = null,
                     IPAddress = data.IPAddress,
                     LoggingTriggerType = data.LoggingTriggerType ?? LoggingTriggerType.User,
-                    LogLevel = LogLevel.Debug,
+                    LogLevel = LogLevel.Information,
                     Message = "回應請求",
                     MessageType = LoggingMessageType.MvcResponse,
-                    Resource = String.Empty,
+                    Resource = $"{data.ControllerName}.{data.ActionName}",
                     Scope = LoggingScope.FrontEnd,
                     SystemScope = LoggingSystemScope.Local,
                     TriggerReferenceId = data.TriggerReferenceID
@@ -63,10 +63,10 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
                     Exception = data.Exception,
                     IPAddress = data.IPAddress,
                     LoggingTriggerType = data.LoggingTriggerType ?? LoggingTriggerType.User,
-                    LogLevel = LogLevel.Debug,
-                    Message = $"執行發生錯誤-{data.Exception.GetType().Name}",
+                    LogLevel = LogLevel.Error,
+                    Message = $"執行發生錯誤",
                     MessageType = LoggingMessageType.MvcError,
-                    Resource = String.Empty,
+                    Resource = data.Exception.GetType().FullName,
                     Scope = LoggingScope.FrontEnd,
                     SystemScope = LoggingSystemScope.Local,
                     TriggerReferenceId = data.TriggerReferenceID
@@ -82,6 +82,55 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
             options.ActivityIdHeaderKey = "ActivityId";
             options.LoggingTriggerTypeHeaderKey = "LoggingTriggerType";
             options.TriggerReferenceIdHeaderKey = "TriggerReferenceId";
+        }
+        /// <summary>
+        /// 設定記錄行為
+        /// </summary>
+        /// <param name="options">用於<see cref="TEC.Core.Web.Logging.WebContextLoggerOptions"/>的參數設定</param>
+        internal static void ConfigureLogging(TEC.Core.Web.Logging.WebContextLoggerOptions options)
+        {
+            options.RequestParsedAction = (loggerFactory, data) =>
+            {
+                if (!data.HasMappedControllerAction.HasValue || !data.HasMappedControllerAction.Value)
+                {
+                    loggerFactory.Log(new LogState()
+                    {
+                        ActivityId = data.ActivityId,
+                        ExtendProperties = data.BodyString,
+                        Exception = null,
+                        IPAddress = data.IPAddress,
+                        LoggingTriggerType = data.LoggingTriggerType ?? LoggingTriggerType.User,
+                        LogLevel = LogLevel.Information,
+                        Message = "接收請求",
+                        MessageType = LoggingMessageType.ReceivedClientRequest,
+                        Resource = data.Path,
+                        Scope = LoggingScope.API,
+                        SystemScope = LoggingSystemScope.Local,
+                        TriggerReferenceId = data.TriggerReferenceID
+                    });
+                }
+            };
+            options.ResponseParsedAction = (loggerFactory, data) =>
+            {
+                if (!data.HasMappedControllerAction.HasValue || !data.HasMappedControllerAction.Value)
+                {
+                    loggerFactory.Log(new LogState()
+                    {
+                        ActivityId = data.ActivityId,
+                        ExtendProperties = data.BodyString,
+                        Exception = null,
+                        IPAddress = data.IPAddress,
+                        LoggingTriggerType = data.LoggingTriggerType ?? LoggingTriggerType.User,
+                        LogLevel = LogLevel.Information,
+                        Message = "回應請求",
+                        MessageType = LoggingMessageType.ResponseDataToClient,
+                        Resource = data.Path,
+                        Scope = LoggingScope.API,
+                        SystemScope = LoggingSystemScope.Local,
+                        TriggerReferenceId = data.TriggerReferenceID
+                    });
+                }
+            };
         }
     }
 }

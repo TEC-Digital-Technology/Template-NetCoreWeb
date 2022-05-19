@@ -18,6 +18,10 @@ namespace Template_NetCoreWeb.WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class API001TestController : ControllerBase
     {
+        public API001TestController(ILoggerFactory loggerFactory)
+        {
+            this.LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+        }
         /// <summary>
         /// 取得公司名稱
         /// </summary>
@@ -26,7 +30,6 @@ namespace Template_NetCoreWeb.WebApi.Controllers
         [HttpPost]
         public async Task<GetCompanyNameResponse> GetCompanyName([FromBody] GetCompanyNameRequest getCompanyNameRequest)
         {
-            //throw new OperationFailedException(ResultCodeSettingEnum.UnrecognizedLanguage);
             return await Task.FromResult(new GetCompanyNameResponse()
             {
                 ComapnyName = "TEC Digital Technology Inc."
@@ -47,5 +50,9 @@ namespace Template_NetCoreWeb.WebApi.Controllers
             });
         }
 
+        /// <summary>
+        /// 設定或取得處理記錄檔工廠
+        /// </summary>
+        private ILoggerFactory LoggerFactory { set; get; }
     }
 }

@@ -9,15 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MicroKnights.Log4NetAdoNetAppender" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.3.1" />
-    <PackageReference Include="TEC_Core_Web_WebApi_Standard_Library" Version="1.2.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+    <PackageReference Include="TEC_Core_Web_WebApi_Standard_Library" Version="1.2.3" />
+    <PackageReference Include="TEC_Logging_Log4Net_Standard_Library" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Template-NetCoreWeb.Core\Template-NetCoreWeb.Core.csproj" />
     <ProjectReference Include="..\Template-NetCoreWeb.Utils\Template-NetCoreWeb.Utils.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="log4net_adonet.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

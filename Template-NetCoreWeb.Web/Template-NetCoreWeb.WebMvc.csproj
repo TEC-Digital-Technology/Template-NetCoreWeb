@@ -8,8 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TEC_Core_Web_Mvc_Standard_Library" Version="1.1.4" />
-    <PackageReference Include="TEC_Core_Web_Standard_Library" Version="1.1.14" />
+    <PackageReference Include="TEC_Core_Web_Mvc_Standard_Library" Version="1.2.0" />
+    <PackageReference Include="TEC_Core_Web_Standard_Library" Version="1.2.0" />
+    <PackageReference Include="TEC_Logging_Log4Net_Standard_Library" Version="1.1.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +20,12 @@
 
   <ItemGroup>
     <Folder Include="Views\Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="log4net_api.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

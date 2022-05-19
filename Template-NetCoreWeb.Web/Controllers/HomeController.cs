@@ -18,7 +18,7 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
         public async Task<IActionResult> Index()
         {
             string partialViewHtml = await this.RenderViewToStringAsync("~/Views/TestFeature/_RenderPartialView.cshtml", new RenderPartialViewModel() { Name = "Test Test!!" }, true);
-            return View();
+            return base.View();
         }
 
         [IgnoreLogging]
