@@ -55,7 +55,8 @@ Enum.GetValues<Template_NetCoreWeb.Utils.Enums.Logging.LoggingScope>()
         {
             options.LoggerRepositoryCreated = (repository) =>
             {
-                log4net.Config.XmlConfigurator.Configure(repository, new FileInfo("log4net_adonet.config"));
+#warning 為了 DEMO 的 log4net 資料庫無法連接導致等待 Log 寫入發生 Timeout 的問題，如果 Log 專用資料庫可以順利連接，則取消註解下一行
+                //log4net.Config.XmlConfigurator.Configure(repository, new FileInfo("log4net_adonet.config"));
             };
         });
     });

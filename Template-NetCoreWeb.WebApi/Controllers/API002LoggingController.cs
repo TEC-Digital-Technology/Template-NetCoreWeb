@@ -80,7 +80,6 @@ namespace Template_NetCoreWeb.WebApi.Controllers
             LogState logState = new LogState()
             {
                 ActivityId = request.ActivityId!.Value,
-                EventTypeId = (int)request.MessageType!.Value,
                 Exception = actualException,
                 ExtendProperties = request.ExtendedProperties,
                 IPAddress = request.IPAddress,

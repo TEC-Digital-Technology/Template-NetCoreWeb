@@ -13,9 +13,5 @@ namespace Template_NetCoreWeb.Utils.Logging
     /// </summary>
     public class LogState : TEC.Core.Web.Logging.LogStateBase<LoggingScope, LoggingSystemScope, LoggingMessageType>
     {
-        /// <summary>
-        /// 設定或取得事件分類 ID
-        /// </summary>
-        public int EventTypeId { set; get; }
     }
 }

@@ -8,15 +8,14 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILoggerFactory loggerFactory)
         {
-            _logger = logger;
+            this.LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
 
         public async Task<IActionResult> Index()
         {
+            this.LoggerFactory.LogDebug("Test!!!");
             string partialViewHtml = await this.RenderViewToStringAsync("~/Views/TestFeature/_RenderPartialView.cshtml", new RenderPartialViewModel() { Name = "Test Test!!" }, true);
             return base.View();
         }
@@ -29,6 +28,9 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
                 throw new Exception($"標記 {nameof(IgnoreLoggingAttribute)} 的 Action 不應被判斷成不忽略紀錄行為。");
             }
         }
-
+        /// <summary>
+        /// 設定或取得處理記錄檔工廠
+        /// </summary>
+        private ILoggerFactory LoggerFactory { set; get; }
     }
 }

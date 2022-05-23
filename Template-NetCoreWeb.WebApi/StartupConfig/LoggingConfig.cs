@@ -19,7 +19,6 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
             {
                 loggerFactory.Log(new LogState()
                 {
-                    EventTypeId = 0,
                     ActivityId = data.ActivityId,
                     ExtendProperties = data.ActionArguments,
                     Exception = null,
@@ -38,7 +37,6 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
             {
                 loggerFactory.Log(new LogState
                 {
-                    EventTypeId = 0,
                     ActivityId = data.ActivityId,
                     ExtendProperties = data.ResponseBodyString,
                     Exception = null,
@@ -57,7 +55,6 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
             {
                 loggerFactory.Log(new LogState
                 {
-                    EventTypeId = 0,
                     ActivityId = data.ActivityId,
                     ExtendProperties = data.ResponseBodyString,
                     Exception = data.Exception,
