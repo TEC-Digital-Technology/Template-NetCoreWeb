@@ -1,6 +1,8 @@
 ﻿using TEC.Core.Logging.Http;
+using TEC.Core.Logging.UIData;
 using TEC.Core.Web.Logging;
 using Template_NetCoreWeb.Core.Logging;
+using Template_NetCoreWeb.Core.UIData;
 using Template_NetCoreWeb.Utils.Enums.Logging;
 using Template_NetCoreWeb.Utils.Logging;
 
@@ -136,7 +138,7 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         #region HTTP Client Handler
         internal static void LoggingHttpClientHandler_LogHttpRequest(object? sender, LogHttpRequestEventArgs<LoggingSystemScope> e)
         {
-            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
             {
                 throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
             }
@@ -159,7 +161,7 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpResponse(object? sender, LogHttpResponseEventArgs<LoggingSystemScope> e)
         {
-            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
             {
                 throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
             }
@@ -182,7 +184,7 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpError(object? sender, LogHttpErrorEventArgs<LoggingSystemScope> e)
         {
-            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
             {
                 throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
             }
@@ -202,6 +204,46 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
                 SystemScope = LoggingSystemScope.Local,
                 TriggerReferenceId = null
             });
+        }
+        #endregion
+        #region UIData
+        public static void UIData_LoggingAction(object sender, DataModifiedEventArgs e)
+        {
+            if (sender is not LoggerFactoryLoggableUIDataBase loggerFactoryLoggableUIDataBase)
+            {
+                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggableUIDataBase).FullName}", nameof(sender));
+            }
+            var logState = new LogState()
+            {
+                ActivityId = e.ActivityId!.Value,
+                ExtendProperties = e.ModifiedItems,
+                Exception = null,
+                IPAddress = String.Empty,
+                LoggingTriggerType = LoggingTriggerType.System,
+                LogLevel = LogLevel.Information,
+                Message = null,
+                MessageType = 0,
+                Resource = $"{e.UIDataType.Name}/{e.MethodName}",
+                Scope = LoggingScope.API,
+                SystemScope = LoggingSystemScope.Local,
+                TriggerReferenceId = null
+            };
+            switch (e.DataModifyType)
+            {
+                case DataModifyType.Add:
+                    logState.Message = "新增資料";
+                    logState.MessageType = LoggingMessageType.UIDataAddData;
+                    break;
+                case DataModifyType.Modify:
+                    logState.Message = "修改資料";
+                    logState.MessageType = LoggingMessageType.UIDataModifyData;
+                    break;
+                case DataModifyType.Delete:
+                    logState.Message = "刪除資料";
+                    logState.MessageType = LoggingMessageType.UIDataDeleteData;
+                    break;
+            }
+            loggerFactoryLoggableUIDataBase.LoggerFactory.Log(logState);
         }
         #endregion
     }

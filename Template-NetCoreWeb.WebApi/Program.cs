@@ -43,6 +43,16 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 #endregion
+#region Logging(UIData)
+builder.Services.AddSingleton(serviceProvider =>
+{
+    TEC.Core.Logging.UIData.LoggableUIDataOptions loggableUIDataOptions = new TEC.Core.Logging.UIData.LoggableUIDataOptions(
+        Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.UIData_LoggingAction,
+        () => TEC.Core.Web.HttpContextProvider.CurrentActivityId!.Value,
+        true, "***");
+    return loggableUIDataOptions;
+});
+#endregion
 #region Logging(Log4net)
 Enum.GetValues<Template_NetCoreWeb.Utils.Enums.Logging.LoggingScope>()
     .ToList()
@@ -63,6 +73,9 @@ Enum.GetValues<Template_NetCoreWeb.Utils.Enums.Logging.LoggingScope>()
             };
         });
     });
+#endregion
+#region UIData
+builder.Services.AddScoped<Template_NetCoreWeb.Core.UIData.AccountUIData>();
 #endregion
 #endregion
 

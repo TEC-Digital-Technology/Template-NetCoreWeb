@@ -136,7 +136,7 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         #region HTTP Client Handler
         internal static void LoggingHttpClientHandler_LogHttpRequest(object? sender, LogHttpRequestEventArgs<LoggingSystemScope> e)
         {
-            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
             {
                 throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
             }
@@ -159,7 +159,7 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpResponse(object? sender, LogHttpResponseEventArgs<LoggingSystemScope> e)
         {
-            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
             {
                 throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
             }
@@ -182,7 +182,7 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpError(object? sender, LogHttpErrorEventArgs<LoggingSystemScope> e)
         {
-            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
             {
                 throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
             }
