@@ -1,4 +1,6 @@
-﻿using TEC.Core.Web.Logging;
+﻿using TEC.Core.Logging.Http;
+using TEC.Core.Web.Logging;
+using Template_NetCoreWeb.Core.Logging;
 using Template_NetCoreWeb.Utils.Enums.Logging;
 using Template_NetCoreWeb.Utils.Logging;
 
@@ -9,6 +11,7 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
     /// </summary>
     internal static class LoggingConfig
     {
+        #region MVC
         /// <summary>
         /// 設定記錄行為
         /// </summary>
@@ -129,5 +132,77 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
                 }
             };
         }
+        #endregion
+        #region HTTP Client Handler
+        internal static void LoggingHttpClientHandler_LogHttpRequest(object? sender, LogHttpRequestEventArgs<LoggingSystemScope> e)
+        {
+            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            {
+                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+            }
+            TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
+            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            {
+                ActivityId = e.RequestId,
+                ExtendProperties = httpRequestEventData.Content,
+                Exception = null,
+                IPAddress = String.Empty,
+                LoggingTriggerType = LoggingTriggerType.System,
+                LogLevel = LogLevel.Information,
+                Message = $"送出 {e.SystemScope.ToString()} 請求({httpRequestEventData.Method})",
+                MessageType = LoggingMessageType.ResponseDataToClient,
+                Resource = httpRequestEventData.RequestUri,
+                Scope = LoggingScope.FrontEnd,
+                SystemScope = LoggingSystemScope.Local,
+                TriggerReferenceId = null
+            });
+        }
+        internal static void LoggingHttpClientHandler_LogHttpResponse(object? sender, LogHttpResponseEventArgs<LoggingSystemScope> e)
+        {
+            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            {
+                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+            }
+            TEC.Core.Logging.Http.HttpResponseEventData httpResponseEventData = e.Response.ToEventData();
+            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            {
+                ActivityId = e.RequestId,
+                ExtendProperties = httpResponseEventData.Content,
+                Exception = null,
+                IPAddress = String.Empty,
+                LoggingTriggerType = LoggingTriggerType.System,
+                LogLevel = LogLevel.Information,
+                Message = $"收到 {e.SystemScope.ToString()} 回應",
+                MessageType = LoggingMessageType.ResponseDataToClient,
+                Resource = e.RequestUri.AbsoluteUri,
+                Scope = LoggingScope.FrontEnd,
+                SystemScope = LoggingSystemScope.Local,
+                TriggerReferenceId = null
+            });
+        }
+        internal static void LoggingHttpClientHandler_LogHttpError(object? sender, LogHttpErrorEventArgs<LoggingSystemScope> e)
+        {
+            if (!(sender is LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase))
+            {
+                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+            }
+            TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
+            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            {
+                ActivityId = e.RequestId,
+                ExtendProperties = httpRequestEventData.Content,
+                Exception = e.Exception,
+                IPAddress = String.Empty,
+                LoggingTriggerType = LoggingTriggerType.System,
+                LogLevel = LogLevel.Information,
+                Message = $"處理 {e.SystemScope.ToString()} 請求時發生錯誤",
+                MessageType = LoggingMessageType.ResponseDataToClient,
+                Resource = httpRequestEventData.RequestUri,
+                Scope = LoggingScope.FrontEnd,
+                SystemScope = LoggingSystemScope.Local,
+                TriggerReferenceId = null
+            });
+        }
+        #endregion
     }
 }

@@ -1,4 +1,7 @@
 
+using TEC.Core.Logging.Http;
+using Template_NetCoreWeb.Utils.Enums.Logging;
+
 var builder = WebApplication.CreateBuilder(args);
 
 #region TEC

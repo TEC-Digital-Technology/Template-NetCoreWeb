@@ -22,6 +22,18 @@ builder.Services.AddLog4NetLoggingConfiguration<
         };
     });
 #endregion
+#region HTTP Handlers
+builder.Services.AddSingleton(typeof(Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler), serviceProvider =>
+{
+    Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler handler = new(new HttpClientHandler(), true, serviceProvider.GetRequiredService<ILoggerFactory>());
+    handler.LogHttpError += Template_NetCoreWeb.WebMvc.StartupConfig.LoggingConfig.LoggingHttpClientHandler_LogHttpError;
+    handler.LogHttpRequest += Template_NetCoreWeb.WebMvc.StartupConfig.LoggingConfig.LoggingHttpClientHandler_LogHttpRequest;
+    handler.LogHttpResponse += Template_NetCoreWeb.WebMvc.StartupConfig.LoggingConfig.LoggingHttpClientHandler_LogHttpResponse;
+    return handler;
+});
+builder.Services.AddHttpClient<Template_NetCoreWeb.Core.UIData.ThirdParty.TEC.TecApiHandler>()
+    .ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
+#endregion
 #endregion
 var app = builder.Build();
 // Configure the HTTP request pipeline.
