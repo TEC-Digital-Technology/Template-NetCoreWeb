@@ -43,6 +43,28 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddSwaggerGenNewtonsoftSupport();
 #endregion
+#region HTTP Handlers
+builder.Services.AddSingleton(typeof(Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler), serviceProvider =>
+{
+    Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler handler = new(new HttpClientHandler(), true, serviceProvider.GetRequiredService<ILoggerFactory>());
+    handler.LogHttpError += Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.LoggingHttpClientHandler_LogHttpError;
+    handler.LogHttpRequest += Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.LoggingHttpClientHandler_LogHttpRequest;
+    handler.LogHttpResponse += Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.LoggingHttpClientHandler_LogHttpResponse;
+    return handler;
+});
+builder.Services.AddHttpClient<Template_NetCoreWeb.Core.UIData.ThirdParty.TEC.TecApiHandler>()
+    .ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
+#endregion
+#region SOAP
+builder.Services.AddSingleton(typeof(Template_NetCoreWeb.Core.Logging.SoapManagers.SoapDemoLoggingManager), serviceProvider =>
+{
+    Template_NetCoreWeb.Core.Logging.SoapManagers.SoapDemoLoggingManager manager = new(serviceProvider.GetRequiredService<ILoggerFactory>());
+    manager.LogSoapError += Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.SoapLoggingManager_LogSoapError!;
+    manager.LogSoapRequest += Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.SoapLoggingManager_LogSoapRequest!;
+    manager.LogSoapResponse += Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.SoapLoggingManager_LogSoapResponse!;
+    return manager;
+});
+#endregion
 #region Logging(UIData)
 builder.Services.AddSingleton(serviceProvider =>
 {

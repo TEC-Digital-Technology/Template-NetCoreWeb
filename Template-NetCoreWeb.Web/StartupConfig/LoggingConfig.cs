@@ -136,12 +136,12 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         #region HTTP Client Handler
         internal static void LoggingHttpClientHandler_LogHttpRequest(object? sender, LogHttpRequestEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
-            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            requiredLoggerFactory.LoggerFactory.Log(new LogState()
             {
                 ActivityId = e.RequestId,
                 ExtendProperties = httpRequestEventData.Content,
@@ -159,12 +159,12 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpResponse(object? sender, LogHttpResponseEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpResponseEventData httpResponseEventData = e.Response.ToEventData();
-            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            requiredLoggerFactory.LoggerFactory.Log(new LogState()
             {
                 ActivityId = e.RequestId,
                 ExtendProperties = httpResponseEventData.Content,
@@ -182,19 +182,19 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpError(object? sender, LogHttpErrorEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
-            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            requiredLoggerFactory.LoggerFactory.Log(new LogState()
             {
                 ActivityId = e.RequestId,
                 ExtendProperties = httpRequestEventData.Content,
                 Exception = e.Exception,
                 IPAddress = String.Empty,
                 LoggingTriggerType = LoggingTriggerType.System,
-                LogLevel = LogLevel.Information,
+                LogLevel = LogLevel.Error,
                 Message = $"處理 {e.SystemScope.ToString()} 請求時發生錯誤",
                 MessageType = LoggingMessageType.ResponseDataToClient,
                 Resource = httpRequestEventData.RequestUri,

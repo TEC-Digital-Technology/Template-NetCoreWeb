@@ -12,7 +12,7 @@ namespace Template_NetCoreWeb.Core.Logging
     /// <summary>
     /// 解決方案專用，使用 <see cref="ILoggerFactory"/> 的 HTTP 請求處理類別
     /// </summary>
-    public abstract class LoggerFactoryLoggingHttpClientHandlerBase : LoggingHttpClientHandlerBase<LoggingSystemScope>
+    public abstract class LoggerFactoryLoggingHttpClientHandlerBase : LoggingHttpClientHandlerBase<LoggingSystemScope>, IRequiredLoggerFactory
     {
         /// <summary>
         /// 初始化使用 <see cref="ILoggerFactory"/> 的 HTTP 請求處理類別

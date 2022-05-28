@@ -1,4 +1,5 @@
 ﻿using TEC.Core.Logging.Http;
+using TEC.Core.Logging.Soap;
 using TEC.Core.Logging.UIData;
 using TEC.Core.Web.Logging;
 using Template_NetCoreWeb.Core.Logging;
@@ -138,12 +139,12 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         #region HTTP Client Handler
         internal static void LoggingHttpClientHandler_LogHttpRequest(object? sender, LogHttpRequestEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
-            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            requiredLoggerFactory.LoggerFactory.Log(new LogState()
             {
                 ActivityId = e.RequestId,
                 ExtendProperties = httpRequestEventData.Content,
@@ -161,12 +162,12 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpResponse(object? sender, LogHttpResponseEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpResponseEventData httpResponseEventData = e.Response.ToEventData();
-            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            requiredLoggerFactory.LoggerFactory.Log(new LogState()
             {
                 ActivityId = e.RequestId,
                 ExtendProperties = httpResponseEventData.Content,
@@ -184,19 +185,19 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpError(object? sender, LogHttpErrorEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not LoggerFactoryLoggingHttpClientHandlerBase loggerFactoryLoggingHttpClientHandlerBase)
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggingHttpClientHandlerBase).FullName}", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
-            loggerFactoryLoggingHttpClientHandlerBase.LoggerFactory.Log(new LogState()
+            requiredLoggerFactory.LoggerFactory.Log(new LogState()
             {
                 ActivityId = e.RequestId,
                 ExtendProperties = httpRequestEventData.Content,
                 Exception = e.Exception,
                 IPAddress = String.Empty,
                 LoggingTriggerType = LoggingTriggerType.System,
-                LogLevel = LogLevel.Information,
+                LogLevel = LogLevel.Error,
                 Message = $"處理 {e.SystemScope.ToString()} 請求時發生錯誤",
                 MessageType = LoggingMessageType.ResponseDataToClient,
                 Resource = httpRequestEventData.RequestUri,
@@ -209,9 +210,9 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         #region UIData
         public static void UIData_LoggingAction(object sender, DataModifiedEventArgs e)
         {
-            if (sender is not LoggerFactoryLoggableUIDataBase loggerFactoryLoggableUIDataBase)
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須繼承自 {typeof(LoggerFactoryLoggableUIDataBase).FullName}", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
             }
             var logState = new LogState()
             {
@@ -243,7 +244,81 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
                     logState.MessageType = LoggingMessageType.UIDataDeleteData;
                     break;
             }
-            loggerFactoryLoggableUIDataBase.LoggerFactory.Log(logState);
+            requiredLoggerFactory.LoggerFactory.Log(logState);
+        }
+        #endregion
+        #region SOAP
+        public static void SoapLoggingManager_LogSoapResponse(object sender, LogSoapResponseEventArgs<LoggingSystemScope> e)
+        {
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
+            {
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
+            }
+            SoapEventData responseSoapData = e.Response.ToEventData();
+            var logState = new LogState()
+            {
+                ActivityId = e.RequestId,
+                ExtendProperties = responseSoapData.Content,
+                Exception = null,
+                IPAddress = String.Empty,
+                LoggingTriggerType = LoggingTriggerType.System,
+                LogLevel = LogLevel.Information,
+                Message = $"接收 SOAP-{e.OperationName} 回應",
+                MessageType = LoggingMessageType.ThirdPartySoapResponse,
+                Resource = e.OperationName,
+                Scope = LoggingScope.API,
+                SystemScope = e.SystemScope,
+                TriggerReferenceId = null
+            };
+            requiredLoggerFactory.LoggerFactory.Log(logState);
+        }
+        public static void SoapLoggingManager_LogSoapRequest(object sender, LogSoapRequestEventArgs<LoggingSystemScope> e)
+        {
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
+            {
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
+            }
+            SoapEventData requestSoapData = e.Request.ToEventData();
+            var logState = new LogState()
+            {
+                ActivityId = e.RequestId,
+                ExtendProperties = requestSoapData.Content,
+                Exception = null,
+                IPAddress = String.Empty,
+                LoggingTriggerType = LoggingTriggerType.System,
+                LogLevel = LogLevel.Information,
+                Message = $"送出 SOAP-{e.OperationName} 請求",
+                MessageType = LoggingMessageType.ThirdPartySoapRequest,
+                Resource = e.OperationName,
+                Scope = LoggingScope.API,
+                SystemScope = e.SystemScope,
+                TriggerReferenceId = null
+            };
+            requiredLoggerFactory.LoggerFactory.Log(logState);
+        }
+        public static void SoapLoggingManager_LogSoapError(object sender, LogSoapErrorEventArgs<LoggingSystemScope> e)
+        {
+            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
+            {
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
+            }
+            SoapEventData errorSoapData = e.Request.ToEventData();
+            var logState = new LogState()
+            {
+                ActivityId = e.RequestId,
+                ExtendProperties = errorSoapData.Content,
+                Exception = e.Exception,
+                IPAddress = String.Empty,
+                LoggingTriggerType = LoggingTriggerType.System,
+                LogLevel = LogLevel.Error,
+                Message = $"送出 SOAP-{e.OperationName} 請求發生錯誤",
+                MessageType = LoggingMessageType.ThirdPartySoapError,
+                Resource = e.OperationName,
+                Scope = LoggingScope.API,
+                SystemScope = e.SystemScope,
+                TriggerReferenceId = null
+            };
+            requiredLoggerFactory.LoggerFactory.Log(logState);
         }
         #endregion
     }

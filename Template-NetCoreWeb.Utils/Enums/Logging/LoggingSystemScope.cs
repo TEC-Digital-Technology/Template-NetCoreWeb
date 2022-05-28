@@ -22,6 +22,11 @@ namespace Template_NetCoreWeb.Utils.Enums.Logging
         /// 雲騰
         /// </summary>
         [EnumDescription("TEC")]
-        TEC = 2
+        TEC = 2,
+        /// <summary>
+        /// DEMO 用的 SOAP 站台
+        /// </summary>
+        [EnumDescription("Demo SOAP")]
+        DemoSoap = 3
     }
 }
