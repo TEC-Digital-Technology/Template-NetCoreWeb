@@ -20,7 +20,7 @@
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.9.0" />
     <PackageReference Include="TEC_Core_Logging_Standard_Library" Version="1.2.0" />
-    <PackageReference Include="TEC_Core_Web_WebApi_Standard_Library" Version="1.2.3" />
+    <PackageReference Include="TEC_Core_Web_WebApi_Standard_Library" Version="1.2.4" />
     <PackageReference Include="TEC_Logging_Log4Net_Standard_Library" Version="1.1.2" />
   </ItemGroup>
 

@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TEC.Core.Logging.UIData;
+using Template_NetCoreWeb.Core.Logging;
 
 namespace Template_NetCoreWeb.Core.UIData
 {
     /// <summary>
     /// 解決方案專用，使用 <see cref="ILoggerFactory"/> 的 UIData 處理類別 
     /// </summary>
-    public class LoggerFactoryLoggableUIDataBase: LoggableUIDataBase
+    public class LoggerFactoryLoggableUIDataBase : LoggableUIDataBase, IRequiredLoggerFactory
     {
         /// <summary>
         /// 初始化使用 <see cref="ILoggerFactory"/> 的 UIData 請求處理類別
