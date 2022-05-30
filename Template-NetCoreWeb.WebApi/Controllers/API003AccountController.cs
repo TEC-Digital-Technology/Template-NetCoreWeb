@@ -38,8 +38,8 @@ namespace Template_NetCoreWeb.WebApi.Controllers
         }
 
         /// <summary>
-        /// 設定或取得帳號處理物件
+        /// 取得帳號處理物件
         /// </summary>
-        private AccountUIData AccountUIData { set; get; }
+        private AccountUIData AccountUIData { get; }
     }
 }

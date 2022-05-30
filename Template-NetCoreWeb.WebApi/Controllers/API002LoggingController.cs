@@ -118,8 +118,8 @@ namespace Template_NetCoreWeb.WebApi.Controllers
             return new NewLogResponse();
         }
         /// <summary>
-        /// 設定或取得處理記錄檔工廠
+        /// 取得處理記錄檔工廠
         /// </summary>
-        private ILoggerFactory LoggerFactory { set; get; }
+        private ILoggerFactory LoggerFactory { get; }
     }
 }

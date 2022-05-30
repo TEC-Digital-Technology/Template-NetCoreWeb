@@ -12,7 +12,7 @@ namespace Template_NetCoreWeb.Core.UIData
     /// <summary>
     /// 解決方案專用，使用 <see cref="ILoggerFactory"/> 的 UIData 處理類別 
     /// </summary>
-    public class LoggerFactoryLoggableUIDataBase : LoggableUIDataBase, IRequiredLoggerFactory
+    public class LoggerFactoryLoggableUIDataBase : LoggableUIDataBase, IRequireLoggerFactory
     {
         /// <summary>
         /// 初始化使用 <see cref="ILoggerFactory"/> 的 UIData 請求處理類別
@@ -27,6 +27,6 @@ namespace Template_NetCoreWeb.Core.UIData
         /// <summary>
         /// 取得物件所需使用的 <see cref="ILoggerFactory"/>
         /// </summary>
-        public ILoggerFactory LoggerFactory { private set; get; }
+        public ILoggerFactory LoggerFactory { get; }
     }
 }

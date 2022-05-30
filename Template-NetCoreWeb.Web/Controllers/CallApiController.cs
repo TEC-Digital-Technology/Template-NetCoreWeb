@@ -23,8 +23,8 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
         }
 
         /// <summary>
-        /// 設定或取得連接 TEC API 的介接物件
+        /// 取得連接 TEC API 的介接物件
         /// </summary>
-        private TecApiHandler TecApiHandler { set; get; }
+        private TecApiHandler TecApiHandler { get; }
     }
 }

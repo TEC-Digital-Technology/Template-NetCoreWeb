@@ -29,8 +29,8 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
             }
         }
         /// <summary>
-        /// 設定或取得處理記錄檔工廠
+        /// 取得處理記錄檔工廠
         /// </summary>
-        private ILoggerFactory LoggerFactory { set; get; }
+        private ILoggerFactory LoggerFactory { get; }
     }
 }

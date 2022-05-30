@@ -136,9 +136,9 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         #region HTTP Client Handler
         internal static void LoggingHttpClientHandler_LogHttpRequest(object? sender, LogHttpRequestEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
+            if (sender is not IRequireLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
             requiredLoggerFactory.LoggerFactory.Log(new LogState()
@@ -159,9 +159,9 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpResponse(object? sender, LogHttpResponseEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
+            if (sender is not IRequireLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpResponseEventData httpResponseEventData = e.Response.ToEventData();
             requiredLoggerFactory.LoggerFactory.Log(new LogState()
@@ -182,9 +182,9 @@ namespace Template_NetCoreWeb.WebMvc.StartupConfig
         }
         internal static void LoggingHttpClientHandler_LogHttpError(object? sender, LogHttpErrorEventArgs<LoggingSystemScope> e)
         {
-            if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
+            if (sender is not IRequireLoggerFactory requiredLoggerFactory)
             {
-                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
+                throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
             }
             TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
             requiredLoggerFactory.LoggerFactory.Log(new LogState()

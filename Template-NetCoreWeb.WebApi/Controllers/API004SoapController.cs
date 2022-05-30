@@ -44,8 +44,8 @@ namespace Template_NetCoreWeb.WebApi.Controllers
         }
 
         /// <summary>
-        /// 設定或取得帳號處理物件
+        /// 取得帳號處理物件
         /// </summary>
-        private SoapDemoLoggingManager SoapDemoLoggingManager { set; get; }
+        private SoapDemoLoggingManager SoapDemoLoggingManager { get; }
     }
 }

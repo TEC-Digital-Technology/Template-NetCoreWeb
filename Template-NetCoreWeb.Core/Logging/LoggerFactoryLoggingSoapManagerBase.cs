@@ -15,7 +15,7 @@ namespace Template_NetCoreWeb.Core.Logging
     /// </summary>
     /// <typeparam name="TClient">SoapClient 的類別</typeparam>
     /// <typeparam name="TChannel">SoapClient 上的 Chennel 的類別</typeparam>
-    public class LoggerFactoryLoggingSoapManagerBase<TClient, TChannel> : LoggingSoapManagerBase<TClient, TChannel, LoggingSystemScope>, IRequiredLoggerFactory
+    public class LoggerFactoryLoggingSoapManagerBase<TClient, TChannel> : LoggingSoapManagerBase<TClient, TChannel, LoggingSystemScope>, IRequireLoggerFactory
         where TClient : ClientBase<TChannel>, new()
         where TChannel : class
     {
@@ -25,13 +25,13 @@ namespace Template_NetCoreWeb.Core.Logging
         /// <param name="options">用於初始化 <see cref="LoggingSoapManagerBase{TClient,TChannel,LoggingSystemScope}"/> 的選項物件</param>
         /// <param name="loggerFactory">關於此物件所需使用的 <see cref="ILoggerFactory"/></param>
         public LoggerFactoryLoggingSoapManagerBase(LoggingSoapManagerOptions<TClient, TChannel, LoggingSystemScope> options, ILoggerFactory? loggerFactory)
-            :base(options)
+            : base(options)
         {
             this.LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
         /// <summary>
         /// 取得物件所需使用的 <see cref="ILoggerFactory"/>
         /// </summary>
-        public ILoggerFactory LoggerFactory { private set; get; }
+        public ILoggerFactory LoggerFactory { get; }
     }
 }
