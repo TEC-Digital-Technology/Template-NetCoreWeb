@@ -1,6 +1,4 @@
-
-using TEC.Core.Logging.Http;
-using Template_NetCoreWeb.Utils.Enums.Logging;
+using Template_NetCoreWeb.WebApi.StartupConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -96,6 +94,29 @@ Enum.GetValues<Template_NetCoreWeb.Utils.Enums.Logging.LoggingScope>()
             };
         });
     });
+#endregion
+#region Internal Libraries
+builder.Services.AddScoped(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return new TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingCollection()
+    {
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingEnum.ClientName, configuration["TEC:InternalWeb:ApiClientSetting:ClientName"] },
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingEnum.CryptionIv, configuration["TEC:InternalWeb:ApiClientSetting:CryptionIv"] },
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingEnum.CryptionKey, configuration["TEC:InternalWeb:ApiClientSetting:CryptionKey"] },
+    };
+});
+builder.Services.AddScoped(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return new TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingCollection()
+    {
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingEnum.DefaultExpectedResultCode, configuration["TEC:InternalWeb:ApiResultSetting:DefaultExpectedResultCode"] },
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingEnum.ResultCodeKey, configuration["TEC:InternalWeb:ApiResultSetting:ResultCodeKey"] },
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingEnum.ResultMessageKey, configuration["TEC:InternalWeb:ApiResultSetting:ResultMessageKey"] },
+    };
+});
+builder.Services.ConfigureAccountService();
 #endregion
 #region UIData
 builder.Services.AddScoped<Template_NetCoreWeb.Core.UIData.AccountUIData>();
