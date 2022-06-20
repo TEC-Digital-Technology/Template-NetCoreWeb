@@ -2,7 +2,7 @@
 using TEC.Core.Logging;
 using TEC.Core.Web;
 using TEC.Core.Web.Mvc.Extensions;
-using Template_NetCoreWeb.Core.UIData.ThirdParty.TEC;
+using Template_NetCoreWeb.Core.UIData.ThirdParty.TECApi;
 
 namespace Template_NetCoreWeb.WebMvc.Controllers
 {

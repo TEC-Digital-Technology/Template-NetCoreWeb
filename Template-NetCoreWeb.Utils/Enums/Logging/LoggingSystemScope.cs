@@ -27,6 +27,11 @@ namespace Template_NetCoreWeb.Utils.Enums.Logging
         /// DEMO 用的 SOAP 站台
         /// </summary>
         [EnumDescription("Demo SOAP")]
-        DemoSoap = 3
+        DemoSoap = 3,
+        /// <summary>
+        /// 範例 API (Template-NetCoreWeb.WebApi)
+        /// </summary>
+        [EnumDescription("Template-NetCoreWeb.WebApi")]
+        NetCoreDemo = 4
     }
 }

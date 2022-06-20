@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Template_NetCoreWeb.Core.UIData.ThirdParty.TEC
+namespace Template_NetCoreWeb.Core.UIData.ThirdParty.TECApi
 {
     /// <summary>
     /// TEC API 介接物件，此類別無法被繼承

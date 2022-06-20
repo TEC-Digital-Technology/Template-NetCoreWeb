@@ -27,6 +27,7 @@ namespace Template_NetCoreWeb.StartupConfig
                 resultCodeSettingCollection[ResultCodeSettingEnum.InvalidArgument] = "參數驗證錯誤";
                 resultCodeSettingCollection[ResultCodeSettingEnum.InvalidRange] = "無效的參數區間";
                 resultCodeSettingCollection[ResultCodeSettingEnum.ItemRequired] = "必須要有至少一個元素";
+                resultCodeSettingCollection[ResultCodeSettingEnum.SilentTokenAcquisitionFailed] = "無法背景更新 Token";
                 resultCodeSettingCollection[ResultCodeSettingEnum.Success] = "成功";
                 resultCodeSettingCollection[ResultCodeSettingEnum.SystemError] = "系統發生未預期的錯誤";
                 resultCodeSettingCollection[ResultCodeSettingEnum.UnrecognizedLanguage] = "無效的語系";

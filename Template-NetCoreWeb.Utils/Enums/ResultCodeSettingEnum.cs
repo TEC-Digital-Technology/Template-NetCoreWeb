@@ -28,6 +28,11 @@ namespace Template_NetCoreWeb.Utils.Enums
         /// </summary>
         [EnumDescription("0002")]
         UnrecognizedLanguage,
+        /// <summary>
+        /// 無法背景更新 Token
+        /// </summary>
+        [EnumDescription("0003")]
+        SilentTokenAcquisitionFailed,
         #endregion 系統(0000-0FFF)
         #region 驗證 (1000-1FFF)
         /// <summary>
