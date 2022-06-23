@@ -23,14 +23,15 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
     public class AuthController : Controller
     {
         public AuthController(ILoggerFactory loggerFactory, ClientApplicationSettingCollection clientApplicationSettingCollection,
-            AuthSettingCollection authSettingCollection,
-            IConfidentialClientApplication confidentialClientApplication, Api003AccountApiHandler api003AccountApiHandler)
+            AuthSettingCollection authSettingCollection,IConfidentialClientApplication confidentialClientApplication, 
+            Api003AccountApiHandler api003AccountApiHandler, PersonalDataSettingCollection personalDataSettingCollection)
         {
             this.LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             this.ConfidentialClientApplication = confidentialClientApplication ?? throw new ArgumentNullException(nameof(confidentialClientApplication));
             this.ClientApplicationSettingCollection = clientApplicationSettingCollection ?? throw new ArgumentNullException(nameof(clientApplicationSettingCollection));
             this.AuthSettingCollection = authSettingCollection ?? throw new ArgumentNullException(nameof(authSettingCollection));
             this.Api003AccountApiHandler = api003AccountApiHandler ?? throw new ArgumentNullException(nameof(api003AccountApiHandler));
+            this.PersonalDataSettingCollection = personalDataSettingCollection ?? throw new ArgumentNullException(nameof(personalDataSettingCollection));
 
         }
 
@@ -44,7 +45,7 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
         {
             string clientId = this.ClientApplicationSettingCollection[ClientApplicationSettingEnum.ClientId].ToString()!;
             //以便在完成 TEC Portal 登入流程後，可以導向回原本要瀏覽的位址
-            base.TempData["SignInRedirectPath"] = redirectPath;
+            this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedIn] = redirectPath;
             UriBuilder uriBuilder = new UriBuilder(this.PortalUri);
             uriBuilder.Path = "/AccountManagement/TEC/RedirectToSignIn";
             NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -73,6 +74,8 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> OAuthSignIn()
         {
+            this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedIn] = null;
+            this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedIn] = "/Aaa/aaa";
             Uri authorizationUrl = await this.ConfidentialClientApplication.GetAuthorizationRequestUrl(new[] { "profile", "openid", "email" })
                     .WithExtraQueryParameters(new Dictionary<string, string>()
                     {
@@ -115,7 +118,7 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
                 IsPersistent = true,//不因瀏覽器關閉而消滅
                 IssuedUtc = DateTimeOffset.FromUnixTimeSeconds(accountCliamsInfo.Iat)
             });
-            string? redirectPath = base.TempData["SignInRedirectPath"]?.ToString()!;
+            string? redirectPath = this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedIn];
             if (redirectPath == null || new Uri(redirectPath!, UriKind.RelativeOrAbsolute).IsAbsoluteUri)
             {
                 redirectPath = base.Url.Action("Index", "AuthorizedRequired")!;
@@ -133,7 +136,7 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
             await base.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             string clientId = this.ClientApplicationSettingCollection[ClientApplicationSettingEnum.ClientId].ToString()!;
             //以便在完成 TEC Portal 登出流程後，可以導向到登出後要瀏覽的位址
-            base.TempData["SignOutRedirectPath"] = redirectPath;
+            this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedOut] = redirectPath;
             UriBuilder uriBuilder = new UriBuilder(this.PortalUri);
             uriBuilder.Path = "/AccountManagement/TEC/SignOut";
             NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -148,7 +151,7 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
         /// <returns></returns>
         public ActionResult SignedOut()
         {
-            string? redirectPath = base.TempData["SignOutRedirectPath"]?.ToString()!;
+            string? redirectPath = this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedOut];
             if (redirectPath == null || new Uri(redirectPath!, UriKind.RelativeOrAbsolute).IsAbsoluteUri)
             {
                 redirectPath = base.Url.Action("Index", "Home")!;
@@ -191,5 +194,9 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
         /// 取得 API003Account 介接物件
         /// </summary>
         private Api003AccountApiHandler Api003AccountApiHandler { get; }
+        /// <summary>
+        /// 取得儲存於 Session 的個人化設定檔集合
+        /// </summary>
+        private PersonalDataSettingCollection PersonalDataSettingCollection { get; }
     }
 }

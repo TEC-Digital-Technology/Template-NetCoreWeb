@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Template_NetCoreWeb.Utils.Enums.Settings;
 using Template_NetCoreWeb.WebMvc.Settings;
 using Template_NetCoreWeb.WebMvc.StartupConfig;
 
@@ -12,12 +13,6 @@ builder.Services.AddMvc(options =>
     options.Filters.Add(typeof(TEC.Core.Web.Logging.Filters.LogRequestFilter));
     options.Filters.Add(typeof(TEC.Core.Web.Logging.Filters.LogResponseFilter));
     options.Filters.Add(typeof(TEC.Core.Web.Logging.Filters.LogExceptionFilter));
-});
-builder.Services.AddSession(options =>
-{
-    options.Cookie.Name = "Template_NetCoreWeb.Session";
-    options.Cookie.SameSite = SameSiteMode.Lax;
-    options.IdleTimeout = TimeSpan.FromMinutes(60);
 });
 #region Logging(Log4net)
 builder.Services.AddLog4NetLoggingConfiguration<
@@ -117,19 +112,38 @@ builder.Services.AddScoped<Template_NetCoreWeb.WebMvc.Security.TecCookieAuthenti
 #endregion
 #region Session
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = "Template_NetCoreWeb.Session";
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+});
 builder.Services.AddScoped<PersonalDataSettingCollection>(serviceProvider =>
 {
-    PersonalDataSettingCollection result;
-    var session = serviceProvider.GetRequiredService<ISession>();
-    if (!session.TryGetValue(nameof(PersonalDataSettingCollection), out byte[]? sessionValue))
+    var httpContext = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+    PersonalDataSettingCollection result = new PersonalDataSettingCollection(httpContext.HttpContext!.Session);
+    result.OnSettingValueSet += (sender, e) =>
     {
-        result = new PersonalDataSettingCollection();
-        session.Set(nameof(PersonalDataSettingCollection), System.Text.Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(result)));
-    }
-    else
+        if (e.Value == null)
+        {
+            httpContext.HttpContext!.Session.Remove((sender as PersonalDataSettingCollection)!.GetSessionKey(e.Key));
+        }
+        else
+        {
+            httpContext.HttpContext!.Session.SetString((sender as PersonalDataSettingCollection)!.GetSessionKey(e.Key), e.Value!);
+        }
+    };
+    result.OnSettingValueRemoved += (sender, e) =>
     {
-        result = Newtonsoft.Json.JsonConvert.DeserializeObject<PersonalDataSettingCollection>(System.Text.Encoding.UTF8.GetString(sessionValue!))!;
-    }
+        httpContext.HttpContext!.Session.Remove((sender as PersonalDataSettingCollection)!.GetSessionKey(e.Key));
+    };
+    result.OnSettingValueCleared += (sender, e) =>
+    {
+        foreach (PersonalDataSettingEnum settingEnum in Enum.GetValues<PersonalDataSettingEnum>())
+        {
+            httpContext.HttpContext.Session.Remove(result.GetSessionKey(settingEnum));
+        }
+    };
     return result;
 });
 #endregion
@@ -141,9 +155,6 @@ app.ConfigureHttpContext();
 app.ConfigureLogging(options => Template_NetCoreWeb.WebMvc.StartupConfig.LoggingConfig.ConfigureBasicLogging(options));
 app.ConfigureLogging(options => Template_NetCoreWeb.WebMvc.StartupConfig.LoggingConfig.ConfigureLogging(options));
 app.UseHttpsRedirection();
-#region Session
-app.UseSession();
-#endregion
 #endregion
 if (!app.Environment.IsDevelopment())
 {
@@ -155,6 +166,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.UseEndpoints(endpoints =>
 {

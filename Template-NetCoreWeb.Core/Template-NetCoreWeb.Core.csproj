@@ -14,6 +14,7 @@
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.9.0" />
     <PackageReference Include="System.ServiceModel.Security" Version="4.9.0" />
     <PackageReference Include="TEC_Core_Logging_Standard_Library" Version="1.2.0" />
+    <PackageReference Include="TEC_Core_Standard_Library" Version="1.2.12" />
     <PackageReference Include="TEC_Core_Web_Mvc_Standard_Library" Version="1.2.1" />
     <PackageReference Include="TEC_Core_Web_Standard_Library" Version="1.2.1" />
     <PackageReference Include="TEC_Internal_Web_AccountService" Version="1.1.2" />
