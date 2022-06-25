@@ -144,7 +144,13 @@ builder.Services.AddScoped<Microsoft.Identity.Client.IConfidentialClientApplicat
 builder.Services.AddScoped<Template_NetCoreWeb.Core.UIData.AccountUIData>();
 #endregion
 #endregion
-
+#region Data Protection
+//builder.Services.AddDataProtection()
+//        .SetApplicationName("netcoredemo.tecyt.com.applocal")
+//        .SetDefaultKeyLifetime(TimeSpan.FromDays(90))//the same as default value
+//        .PersistKeysToAzureBlobStorage(new Uri("https://xxx.blob.core.windows.net/demo-dev/keys.xml?sp=racwl&st=2022-06-25T09:46:00Z&se=2022-07-25T17:46:00Z&sip=125.227.223.156&spr=https&sv=2021-06-08&sr=c&sig=xxxxxxxxxxxxx"))
+//        .ProtectKeysWithCertificate("the thumbnail of the certificate");//Must install the certificate with private key into Key Store#endregion
+#endregion
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {

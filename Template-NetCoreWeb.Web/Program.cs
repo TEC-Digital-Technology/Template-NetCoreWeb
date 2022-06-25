@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 using Template_NetCoreWeb.Utils.Enums.Settings;
 using Template_NetCoreWeb.WebMvc.Settings;
 using Template_NetCoreWeb.WebMvc.StartupConfig;
@@ -49,7 +50,7 @@ builder.Services.AddHttpClient<Template_NetCoreWeb.Core.UIData.ThirdParty.TECApi
     .ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
 #endregion
 #region Internal Libraries
-builder.Services.AddScoped(serviceProvider =>
+builder.Services.AddScoped(serviceProvider => 
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
     return new TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingCollection()
@@ -147,6 +148,13 @@ builder.Services.AddScoped<PersonalDataSettingCollection>(serviceProvider =>
     return result;
 });
 #endregion
+#endregion
+#region Data Protection
+//builder.Services.AddDataProtection()
+//        .SetApplicationName("netcoredemo.tecyt.com.applocal")
+//        .SetDefaultKeyLifetime(TimeSpan.FromDays(90))//the same as default value
+//        .PersistKeysToAzureBlobStorage(new Uri("https://xxx.blob.core.windows.net/demo-dev/keys.xml?sp=racwl&st=2022-06-25T09:46:00Z&se=2022-07-25T17:46:00Z&sip=125.227.223.156&spr=https&sv=2021-06-08&sr=c&sig=xxxxxxxxxxxxx"))
+//        .ProtectKeysWithCertificate("the thumbnail of the certificate");//Must install the certificate with private key into Key Store#endregion
 #endregion
 var app = builder.Build();
 // Configure the HTTP request pipeline.
