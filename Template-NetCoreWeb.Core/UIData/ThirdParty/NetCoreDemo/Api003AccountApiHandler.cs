@@ -37,14 +37,14 @@ namespace Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo
         /// 取得指定的使用者特定設定檔資料
         /// </summary>
         /// <param name="activityId">代表本次活動的 ID</param>
-        /// <param name="id">使用者 ID (UPN)</param>
+        /// <param name="homeAccountId">使用者 HomeAccountId</param>
         /// <param name="authentication">驗證資訊</param>
         /// <returns></returns>
-        public async Task<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse> AcquireTokenSilentAsync(Guid activityId, string id, AuthenticationHeaderValue authentication)
+        public async Task<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse> AcquireTokenSilentAsync(Guid activityId, string homeAccountId, AuthenticationHeaderValue authentication)
         {
             JToken returnedJToken = await base.PostAsync(activityId, "api/API003Account/AcquireTokenSilent", new SortedDictionary<string, object>()
             {
-                {"Id",id }
+                {"HomeAccountId",homeAccountId }
             }, authentication);
             return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse>()!;
         }

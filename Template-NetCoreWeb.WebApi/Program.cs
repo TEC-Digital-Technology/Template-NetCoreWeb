@@ -129,10 +129,12 @@ builder.Services.AddScoped<Microsoft.Identity.Client.IConfidentialClientApplicat
 {
     var clientApplicationSettingCollection = serviceProvider.GetRequiredService<ClientApplicationSettingCollection>();
     Uri redirectUri = new Uri((Uri)clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.FrontendBaseUrl], "/Auth/OAuth");
-    Microsoft.Identity.Client.IConfidentialClientApplication result =  Microsoft.Identity.Client.ConfidentialClientApplicationBuilder.Create(clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.ClientId].ToString())
+    Microsoft.Identity.Client.IConfidentialClientApplication result = Microsoft.Identity.Client.ConfidentialClientApplicationBuilder.Create(clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.ClientId].ToString())
                   .WithAdfsAuthority(clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.Authority].ToString(), true)
                   .WithRedirectUri(redirectUri.AbsoluteUri)
                   .WithClientSecret(clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.ClientSecret].ToString())
+                  //當共用外部 Token Cache 時，需要去掉下一行
+                  .WithCacheOptions(new Microsoft.Identity.Client.CacheOptions(true))
                   .Build();
     //當 API 有多個站台時，需要共用同一個 Token Cache(可以使用 Redis 或 SQL Server)，取消註解以下方法並實作之
     //result.UserTokenCache.SetAfterAccessAsync();

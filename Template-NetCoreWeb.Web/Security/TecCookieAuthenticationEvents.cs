@@ -1,6 +1,7 @@
 ﻿using Itenso.TimePeriod;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Identity.Client;
 using System.Security.Claims;
 using TEC.Core.Web;
 using TEC.Internal.Web.Core.Security;
@@ -44,6 +45,7 @@ namespace Template_NetCoreWeb.WebMvc.Security
             }
             ClaimsIdentity identity = context.Principal!.Identities.Single();
             string accessToken = identity.FindFirst("AccessToken")!.Value;
+            string homeAccountId = identity.FindFirst(nameof(IAccount.HomeAccountId))!.Value;
             bool shouldRenewToken = false;
             try
             {
@@ -68,8 +70,9 @@ namespace Template_NetCoreWeb.WebMvc.Security
             {
                 try
                 {
-                    var acquireTokenSilentResult = await this.Api003AccountApiHandler.AcquireTokenSilentAsync(HttpContextProvider.CurrentActivityId!.Value!, identity.Name!, null!);
+                    var acquireTokenSilentResult = await this.Api003AccountApiHandler.AcquireTokenSilentAsync(HttpContextProvider.CurrentActivityId!.Value!, homeAccountId!, null!);
                     List<Claim> claims = new List<Claim>();
+                    claims.Add(new Claim(nameof(IAccount.HomeAccountId), acquireTokenSilentResult.HomeAccountId!));
                     claims.Add(new Claim("AccessToken", acquireTokenSilentResult.AccessToken!));
                     claims.Add(new Claim("IdToken", acquireTokenSilentResult.IdToken!));
                     claims.Add(new Claim(ClaimTypes.Name, identity.Name!));

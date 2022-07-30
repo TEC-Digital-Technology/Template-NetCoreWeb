@@ -12,6 +12,10 @@ namespace Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response
     public class AcquireTokenByAuthorizationCodeResponse
     {
         /// <summary>
+        /// 設定代表該帳號的 HomeAccountId
+        /// </summary>
+        public string? HomeAccountId { set; get; }
+        /// <summary>
         /// 設定或取得 Access Token 類型
         /// </summary>
         public string? AccessTokenType { set; get; }

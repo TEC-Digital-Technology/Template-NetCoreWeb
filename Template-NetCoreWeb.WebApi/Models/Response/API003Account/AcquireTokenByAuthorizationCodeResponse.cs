@@ -9,6 +9,10 @@ namespace Template_NetCoreWeb.WebApi.Models.Response.API003Account
     public class AcquireTokenByAuthorizationCodeResponse : ResponseBase<ResultCodeSettingEnum>
     {
         /// <summary>
+        /// 設定代表該帳號的 HomeAccountId
+        /// </summary>
+        public string? HomeAccountId { set; get; }
+        /// <summary>
         /// 設定或取得 Access Token 類型
         /// </summary>
         public string? AccessTokenType { set; get; }

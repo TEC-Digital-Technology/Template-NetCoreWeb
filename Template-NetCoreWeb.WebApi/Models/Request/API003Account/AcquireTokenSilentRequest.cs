@@ -8,9 +8,9 @@ namespace Template_NetCoreWeb.WebApi.Models.Request.API003Account
     public class AcquireTokenSilentRequest
     {
         /// <summary>
-        /// 設定或取得 ID
+        /// 設定或取得 HomeAccountId
         /// </summary>
         [Required(ErrorMessage = "1000")]
-        public string? Id { set; get; }
+        public string? HomeAccountId { set; get; }
     }
 }

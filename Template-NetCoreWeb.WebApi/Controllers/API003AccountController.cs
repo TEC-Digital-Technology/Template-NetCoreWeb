@@ -61,6 +61,7 @@ namespace Template_NetCoreWeb.WebApi.Controllers
                         {"resource",this.ClientApplicationSettingCollection[ClientApplicationSettingEnum.GraphResourceId].ToString()! }
                     }).ExecuteAsync();
             AcquireTokenByAuthorizationCodeResponse acquireTokenByAuthorizationCodeResponse = new AcquireTokenByAuthorizationCodeResponse();
+            acquireTokenByAuthorizationCodeResponse.HomeAccountId = authenticationResult.Account.HomeAccountId.Identifier;
             acquireTokenByAuthorizationCodeResponse.AccessToken = authenticationResult.AccessToken;
             acquireTokenByAuthorizationCodeResponse.AccessTokenType = authenticationResult.TokenType;
             acquireTokenByAuthorizationCodeResponse.Authority = this.ConfidentialClientApplication.Authority;
@@ -83,7 +84,8 @@ namespace Template_NetCoreWeb.WebApi.Controllers
             AuthenticationResult authenticationResult;
             try
             {
-                authenticationResult = await this.ConfidentialClientApplication.AcquireTokenSilent(new[] { "profile", "openid", "email" }, acquireTokenSilentRequest.Id)
+                IAccount account = await this.ConfidentialClientApplication.GetAccountAsync(acquireTokenSilentRequest.HomeAccountId!);
+                authenticationResult = await this.ConfidentialClientApplication.AcquireTokenSilent(new[] { "profile", "openid", "email" }, account)
                     .WithCorrelationId(HttpContextProvider.CurrentActivityId!.Value)
                     .WithForceRefresh(true)
                     .WithExtraQueryParameters(new Dictionary<string, string>()
@@ -96,6 +98,7 @@ namespace Template_NetCoreWeb.WebApi.Controllers
                 throw new OperationFailedException(ResultCodeSettingEnum.SilentTokenAcquisitionFailed, ex);
             }
             AcquireTokenSilentResponse acquireTokenSilentResponse = new AcquireTokenSilentResponse();
+            acquireTokenSilentResponse.HomeAccountId = authenticationResult.Account.HomeAccountId.Identifier;
             acquireTokenSilentResponse.AccessToken = authenticationResult.AccessToken;
             acquireTokenSilentResponse.AccessTokenType = authenticationResult.TokenType;
             acquireTokenSilentResponse.Authority = this.ConfidentialClientApplication.Authority;

@@ -23,7 +23,7 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
     public class AuthController : Controller
     {
         public AuthController(ILoggerFactory loggerFactory, ClientApplicationSettingCollection clientApplicationSettingCollection,
-            AuthSettingCollection authSettingCollection,IConfidentialClientApplication confidentialClientApplication, 
+            AuthSettingCollection authSettingCollection, IConfidentialClientApplication confidentialClientApplication,
             Api003AccountApiHandler api003AccountApiHandler, PersonalDataSettingCollection personalDataSettingCollection)
         {
             this.LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
@@ -75,7 +75,6 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
         public async Task<IActionResult> OAuthSignIn()
         {
             this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedIn] = null;
-            this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedIn] = "/Aaa/aaa";
             Uri authorizationUrl = await this.ConfidentialClientApplication.GetAuthorizationRequestUrl(new[] { "profile", "openid", "email" })
                     .WithExtraQueryParameters(new Dictionary<string, string>()
                     {
@@ -107,6 +106,7 @@ namespace Template_NetCoreWeb.WebMvc.Controllers
                 return base.Content("登入發生問題，請稍後再試");
             }
             List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(nameof(IAccount.HomeAccountId), acquireTokenByAuthorizationCodeResponse.HomeAccountId!));
             claims.Add(new Claim("AccessToken", acquireTokenByAuthorizationCodeResponse.AccessToken!));
             claims.Add(new Claim("IdToken", acquireTokenByAuthorizationCodeResponse.IdToken!));
             claims.Add(new Claim(ClaimTypes.Name, accountCliamsInfo.UPN));
