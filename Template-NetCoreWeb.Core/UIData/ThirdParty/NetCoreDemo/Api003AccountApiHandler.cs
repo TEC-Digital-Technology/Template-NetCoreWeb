@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo
     /// </summary>
     public class Api003AccountApiHandler : TEC.Internal.Web.Core.ApiProxy.ApiHandlerBase
     {
-        public Api003AccountApiHandler(HttpClient httpClient, ApiResultSettingCollection apiResultSettingCollection, ApiClientSettingCollection apiClientSettingCollection)
-            : base(httpClient, apiResultSettingCollection, apiClientSettingCollection)
+        public Api003AccountApiHandler(HttpClient httpClient, IHostEnvironment hostEnvironment,
+            ApiResultSettingCollection apiResultSettingCollection, ApiClientSettingCollection apiClientSettingCollection)
+            : base(httpClient, hostEnvironment, apiResultSettingCollection, apiClientSettingCollection)
         {
         }
+
         /// <summary>
         /// 取得指定的使用者特定設定檔資料
         /// </summary>
@@ -48,5 +51,9 @@ namespace Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo
             }, authentication);
             return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse>()!;
         }
+
+        /// <inheritdoc/>
+        protected override EnvironmentSettingCollection GetEnvironmentSettingCollection(IHostEnvironment hostEnvironment) =>
+            EnvironmentSettingCollectionHelperInernal.GetFrontendEnvironmentSettingCollection(hostEnvironment);
     }
 }

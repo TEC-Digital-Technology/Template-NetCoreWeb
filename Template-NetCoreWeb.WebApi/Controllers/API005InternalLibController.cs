@@ -21,7 +21,7 @@ namespace Template_NetCoreWeb.WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class API005InternalLibController : ControllerBase
     {
-        public API005InternalLibController(TEC.Internal.Web.AccountService.AccountApiHandler accountApiHandler)
+        public API005InternalLibController(TEC.Internal.Web.AccountService.S001AccountApiHandler accountApiHandler)
         {
             this.AccountApiHandler = accountApiHandler ?? throw new ArgumentNullException(nameof(accountApiHandler));
         }
@@ -42,6 +42,6 @@ namespace Template_NetCoreWeb.WebApi.Controllers
         /// <summary>
         /// 取得帳號處理物件
         /// </summary>
-        private TEC.Internal.Web.AccountService.AccountApiHandler AccountApiHandler { get; }
+        private TEC.Internal.Web.AccountService.S001AccountApiHandler AccountApiHandler { get; }
     }
 }

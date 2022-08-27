@@ -11,6 +11,6 @@ namespace Template_NetCoreWeb.WebApi.Models.Response.API005InternalLib
         /// <summary>
         /// 設定或取得查詢結果
         /// </summary>
-        public TEC.Internal.Web.AccountService.Response.Account.AccountInfoResponse? Result { set; get; }
+        public TEC.Internal.Web.AccountService.Response.S001Account.AccountInfoResponse? Result { set; get; }
     }
 }

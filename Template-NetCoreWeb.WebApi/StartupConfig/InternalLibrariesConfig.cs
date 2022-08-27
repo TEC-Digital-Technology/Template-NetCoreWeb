@@ -13,17 +13,22 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig
         /// <param name="serviceCollection"></param>
         public static void ConfigureAccountService(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddHttpClient<TEC.Internal.Web.AccountService.AccountApiHandler>((serviceProvider, httpClient) =>
+            serviceCollection.AddHttpClient<TEC.Internal.Web.AccountService.S001AccountApiHandler>((serviceProvider, httpClient) =>
             {
                 var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                 httpClient.BaseAddress = new Uri(configuration["TEC:InternalWeb:ServiceLocation:AccountService"]);
             }).ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
-            serviceCollection.AddHttpClient<TEC.Internal.Web.AccountService.AuthorizeApiHandler>((serviceProvider, httpClient) =>
+            serviceCollection.AddHttpClient<TEC.Internal.Web.AccountService.S002AuthorizeApiHandler>((serviceProvider, httpClient) =>
             {
                 var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                 httpClient.BaseAddress = new Uri(configuration["TEC:InternalWeb:ServiceLocation:AccountService"]);
             }).ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
-            serviceCollection.AddHttpClient<TEC.Internal.Web.AccountService.PasscodeApiHandler>((serviceProvider, httpClient) =>
+            serviceCollection.AddHttpClient<TEC.Internal.Web.AccountService.F001AccountApiHandler>((serviceProvider, httpClient) =>
+            {
+                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+                httpClient.BaseAddress = new Uri(configuration["TEC:InternalWeb:ServiceLocation:AccountService"]);
+            }).ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
+            serviceCollection.AddHttpClient<TEC.Internal.Web.AccountService.F002PasscodeApiHandler>((serviceProvider, httpClient) =>
             {
                 var configuration = serviceProvider.GetRequiredService<IConfiguration>();
                 httpClient.BaseAddress = new Uri(configuration["TEC:InternalWeb:ServiceLocation:AccountService"]);
