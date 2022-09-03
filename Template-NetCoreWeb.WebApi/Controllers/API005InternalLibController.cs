@@ -11,37 +11,36 @@ using Template_NetCoreWeb.WebApi.Exceptions;
 using Template_NetCoreWeb.WebApi.Models.Request.API005InternalLib;
 using Template_NetCoreWeb.WebApi.Models.Response.API005InternalLib;
 
-namespace Template_NetCoreWeb.WebApi.Controllers
-{
-    /// <summary>
-    /// API-005 Internal Libraries 控制器
-    /// </summary>
-    [ApiController]
-    [Produces("application/json")]
-    [Route("api/[controller]/[action]")]
-    public class API005InternalLibController : ControllerBase
-    {
-        public API005InternalLibController(TEC.Internal.Web.AccountService.S001AccountApiHandler accountApiHandler)
-        {
-            this.AccountApiHandler = accountApiHandler ?? throw new ArgumentNullException(nameof(accountApiHandler));
-        }
-        /// <summary>
-        /// 透過 Email 取得指定帳號的資訊
-        /// </summary>
-        /// <param name="getAccountInfoByEmailRequest">透過 Email 取得指定帳號資訊的請求</param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<GetAccountInfoByEmailResponse> GetAccountInfoByEmail([FromBody] GetAccountInfoByEmailRequest getAccountInfoByEmailRequest)
-        {
-            return new GetAccountInfoByEmailResponse()
-            {
-                Result = await this.AccountApiHandler.GetAccountInfoByEmailAsync(HttpContextProvider.CurrentActivityId!.Value, getAccountInfoByEmailRequest.Email)
-            };
-        }
+namespace Template_NetCoreWeb.WebApi.Controllers;
 
-        /// <summary>
-        /// 取得帳號處理物件
-        /// </summary>
-        private TEC.Internal.Web.AccountService.S001AccountApiHandler AccountApiHandler { get; }
+/// <summary>
+/// API-005 Internal Libraries 控制器
+/// </summary>
+[ApiController]
+[Produces("application/json")]
+[Route("api/[controller]/[action]")]
+public class API005InternalLibController : ControllerBase
+{
+    public API005InternalLibController(TEC.Internal.Web.AccountService.S001AccountApiHandler accountApiHandler)
+    {
+        this.AccountApiHandler = accountApiHandler ?? throw new ArgumentNullException(nameof(accountApiHandler));
     }
+    /// <summary>
+    /// 透過 Email 取得指定帳號的資訊
+    /// </summary>
+    /// <param name="getAccountInfoByEmailRequest">透過 Email 取得指定帳號資訊的請求</param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<GetAccountInfoByEmailResponse> GetAccountInfoByEmail([FromBody] GetAccountInfoByEmailRequest getAccountInfoByEmailRequest)
+    {
+        return new GetAccountInfoByEmailResponse()
+        {
+            Result = await this.AccountApiHandler.GetAccountInfoByEmailAsync(HttpContextProvider.CurrentActivityId!.Value, getAccountInfoByEmailRequest.Email)
+        };
+    }
+
+    /// <summary>
+    /// 取得帳號處理物件
+    /// </summary>
+    private TEC.Internal.Web.AccountService.S001AccountApiHandler AccountApiHandler { get; }
 }

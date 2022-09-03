@@ -8,52 +8,51 @@ using System.Text;
 using System.Threading.Tasks;
 using TEC.Internal.Web.Core.ApiProxy.Settings;
 
-namespace Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo
+namespace Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo;
+
+/// <summary>
+/// 介接 API003Account API 的類別
+/// </summary>
+public class Api003AccountApiHandler : TEC.Internal.Web.Core.ApiProxy.ApiHandlerBase
 {
-    /// <summary>
-    /// 介接 API003Account API 的類別
-    /// </summary>
-    public class Api003AccountApiHandler : TEC.Internal.Web.Core.ApiProxy.ApiHandlerBase
+    public Api003AccountApiHandler(HttpClient httpClient, IHostEnvironment hostEnvironment,
+        ApiResultSettingCollection apiResultSettingCollection, ApiClientSettingCollection apiClientSettingCollection)
+        : base(httpClient, hostEnvironment, apiResultSettingCollection, apiClientSettingCollection)
     {
-        public Api003AccountApiHandler(HttpClient httpClient, IHostEnvironment hostEnvironment,
-            ApiResultSettingCollection apiResultSettingCollection, ApiClientSettingCollection apiClientSettingCollection)
-            : base(httpClient, hostEnvironment, apiResultSettingCollection, apiClientSettingCollection)
-        {
-        }
-
-        /// <summary>
-        /// 取得指定的使用者特定設定檔資料
-        /// </summary>
-        /// <param name="activityId">代表本次活動的 ID</param>
-        /// <param name="code">用於取得 Token 的 Code</param>
-        /// <param name="authentication">驗證資訊</param>
-        /// <returns></returns>
-        public async Task<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenByAuthorizationCodeResponse> AcquireTokenByAuthorizationCodeAsync(Guid activityId, string code, AuthenticationHeaderValue authentication)
-        {
-            JToken returnedJToken = await base.PostAsync(activityId, "api/API003Account/AcquireTokenByAuthorizationCode", new SortedDictionary<string, object>()
-            {
-                {"Code",code }
-            }, authentication);
-            return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenByAuthorizationCodeResponse>()!;
-        }
-        /// <summary>
-        /// 取得指定的使用者特定設定檔資料
-        /// </summary>
-        /// <param name="activityId">代表本次活動的 ID</param>
-        /// <param name="homeAccountId">使用者 HomeAccountId</param>
-        /// <param name="authentication">驗證資訊</param>
-        /// <returns></returns>
-        public async Task<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse> AcquireTokenSilentAsync(Guid activityId, string homeAccountId, AuthenticationHeaderValue authentication)
-        {
-            JToken returnedJToken = await base.PostAsync(activityId, "api/API003Account/AcquireTokenSilent", new SortedDictionary<string, object>()
-            {
-                {"HomeAccountId",homeAccountId }
-            }, authentication);
-            return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse>()!;
-        }
-
-        /// <inheritdoc/>
-        protected override EnvironmentSettingCollection GetEnvironmentSettingCollection(IHostEnvironment hostEnvironment) =>
-            EnvironmentSettingCollectionHelperInernal.GetFrontendEnvironmentSettingCollection(hostEnvironment);
     }
+
+    /// <summary>
+    /// 取得指定的使用者特定設定檔資料
+    /// </summary>
+    /// <param name="activityId">代表本次活動的 ID</param>
+    /// <param name="code">用於取得 Token 的 Code</param>
+    /// <param name="authentication">驗證資訊</param>
+    /// <returns></returns>
+    public async Task<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenByAuthorizationCodeResponse> AcquireTokenByAuthorizationCodeAsync(Guid activityId, string code, AuthenticationHeaderValue authentication)
+    {
+        JToken returnedJToken = await base.PostAsync(activityId, "api/API003Account/AcquireTokenByAuthorizationCode", new SortedDictionary<string, object>()
+        {
+            {"Code",code }
+        }, authentication);
+        return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenByAuthorizationCodeResponse>()!;
+    }
+    /// <summary>
+    /// 取得指定的使用者特定設定檔資料
+    /// </summary>
+    /// <param name="activityId">代表本次活動的 ID</param>
+    /// <param name="homeAccountId">使用者 HomeAccountId</param>
+    /// <param name="authentication">驗證資訊</param>
+    /// <returns></returns>
+    public async Task<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse> AcquireTokenSilentAsync(Guid activityId, string homeAccountId, AuthenticationHeaderValue authentication)
+    {
+        JToken returnedJToken = await base.PostAsync(activityId, "api/API003Account/AcquireTokenSilent", new SortedDictionary<string, object>()
+        {
+            {"HomeAccountId",homeAccountId }
+        }, authentication);
+        return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse>()!;
+    }
+
+    /// <inheritdoc/>
+    protected override EnvironmentSettingCollection GetEnvironmentSettingCollection(IHostEnvironment hostEnvironment) =>
+        EnvironmentSettingCollectionHelperInernal.GetFrontendEnvironmentSettingCollection(hostEnvironment);
 }
