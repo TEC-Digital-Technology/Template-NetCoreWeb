@@ -28,10 +28,6 @@ public class AcquireTokenSilentResponse
     /// </summary>
     public DateTimeOffset ExpiresOn { set; get; }
     /// <summary>
-    /// 設定或取得提供給開發人員的資訊，此 Token 是延長時間或透過普通方式取得。
-    /// </summary>
-    public bool ExtendedLifeTimeToken { set; get; }
-    /// <summary>
     /// 設定或取得核發 AccessToken 目標的識別，若為 null 時代表無資料
     /// </summary>
     public string? TenantId { set; get; }

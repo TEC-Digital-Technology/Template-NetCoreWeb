@@ -66,7 +66,6 @@ public class API003AccountController : ControllerBase
         acquireTokenByAuthorizationCodeResponse.AccessTokenType = authenticationResult.TokenType;
         acquireTokenByAuthorizationCodeResponse.Authority = this.ConfidentialClientApplication.Authority;
         acquireTokenByAuthorizationCodeResponse.ExpiresOn = authenticationResult.ExpiresOn;
-        acquireTokenByAuthorizationCodeResponse.ExtendedLifeTimeToken = authenticationResult.IsExtendedLifeTimeToken;
         acquireTokenByAuthorizationCodeResponse.IdToken = authenticationResult.IdToken;
         acquireTokenByAuthorizationCodeResponse.TenantId = authenticationResult.TenantId;
         return acquireTokenByAuthorizationCodeResponse;
@@ -103,7 +102,6 @@ public class API003AccountController : ControllerBase
         acquireTokenSilentResponse.AccessTokenType = authenticationResult.TokenType;
         acquireTokenSilentResponse.Authority = this.ConfidentialClientApplication.Authority;
         acquireTokenSilentResponse.ExpiresOn = authenticationResult.ExpiresOn;
-        acquireTokenSilentResponse.ExtendedLifeTimeToken = authenticationResult.IsExtendedLifeTimeToken;
         acquireTokenSilentResponse.IdToken = authenticationResult.IdToken;
         acquireTokenSilentResponse.TenantId = authenticationResult.TenantId;
         return acquireTokenSilentResponse;
