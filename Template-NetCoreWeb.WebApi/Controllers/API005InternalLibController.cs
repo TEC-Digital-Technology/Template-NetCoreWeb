@@ -35,7 +35,8 @@ public class API005InternalLibController : ControllerBase
     {
         return new GetAccountInfoByEmailResponse()
         {
-            Result = await this.AccountApiHandler.GetAccountInfoByEmailAsync(HttpContextProvider.CurrentActivityId!.Value, getAccountInfoByEmailRequest.Email)
+            Result = await this.AccountApiHandler.GetAccountInfoByEmailAsync(HttpContextProvider.CurrentActivityId!.Value,
+                new TEC.Internal.Web.AccountService.Request.S001Account.GetAccountInfoByEmailRequest(getAccountInfoByEmailRequest.Email))
         };
     }
 

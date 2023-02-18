@@ -23,13 +23,13 @@ namespace Template_NetCoreWeb.WebMvc.Controllers;
 public class AuthController : Controller
 {
     public AuthController(ILoggerFactory loggerFactory, ClientApplicationSettingCollection clientApplicationSettingCollection,
-        AuthSettingCollection authSettingCollection, IConfidentialClientApplication confidentialClientApplication,
+        TokenAuthSettingCollection tokenAuthSettingCollection, IConfidentialClientApplication confidentialClientApplication,
         Api003AccountApiHandler api003AccountApiHandler, PersonalDataSettingCollection personalDataSettingCollection)
     {
         this.LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         this.ConfidentialClientApplication = confidentialClientApplication ?? throw new ArgumentNullException(nameof(confidentialClientApplication));
         this.ClientApplicationSettingCollection = clientApplicationSettingCollection ?? throw new ArgumentNullException(nameof(clientApplicationSettingCollection));
-        this.AuthSettingCollection = authSettingCollection ?? throw new ArgumentNullException(nameof(authSettingCollection));
+        this.TokenAuthSettingCollection = tokenAuthSettingCollection ?? throw new ArgumentNullException(nameof(tokenAuthSettingCollection));
         this.Api003AccountApiHandler = api003AccountApiHandler ?? throw new ArgumentNullException(nameof(api003AccountApiHandler));
         this.PersonalDataSettingCollection = personalDataSettingCollection ?? throw new ArgumentNullException(nameof(personalDataSettingCollection));
 
@@ -101,7 +101,7 @@ public class AuthController : Controller
         }
 
         AcquireTokenByAuthorizationCodeResponse acquireTokenByAuthorizationCodeResponse = await this.Api003AccountApiHandler.AcquireTokenByAuthorizationCodeAsync(HttpContextProvider.CurrentActivityId!.Value, code, null!);
-        if (!TEC.Internal.Web.Core.Security.AuthHelper.TryParseAccountCliamsInfo(acquireTokenByAuthorizationCodeResponse.AccessToken!, this.AuthSettingCollection, out TEC.Internal.Web.Core.Security.AccountCliamsInfo accountCliamsInfo))
+        if (!TEC.Internal.Web.Core.Security.AuthHelper.TryParseAccountCliamsInfo(acquireTokenByAuthorizationCodeResponse.AccessToken!, this.TokenAuthSettingCollection, out TEC.Internal.Web.Core.Security.AccountCliamsInfo accountCliamsInfo))
         {
             return base.Content("登入發生問題，請稍後再試");
         }
@@ -189,7 +189,7 @@ public class AuthController : Controller
     /// <summary>
     /// 取得認證資料設定檔集合 
     /// </summary>
-    private AuthSettingCollection AuthSettingCollection { get; }
+    private TokenAuthSettingCollection TokenAuthSettingCollection { get; }
     /// <summary>
     /// 取得 API003Account 介接物件
     /// </summary>

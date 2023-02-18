@@ -76,11 +76,11 @@ builder.Services.ConfigureNetCoreDemo();
 builder.Services.AddScoped(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    return new TEC.Internal.Web.Core.Security.Settings.AuthSettingCollection()
+    return new TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingCollection()
     {
-        { TEC.Internal.Web.Core.Security.Settings.AuthSettingEnum.Issuer, configuration["TEC:Adfs:Issuer"] },
-        { TEC.Internal.Web.Core.Security.Settings.AuthSettingEnum.AllowedAudience, configuration.GetSection("TEC:Adfs:AllowedAudience").Get<string[]>() },
-        { TEC.Internal.Web.Core.Security.Settings.AuthSettingEnum.CertificationPath, configuration.GetSection("TEC:Adfs:SigningCertPath").Get<string[]>() },
+        { TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingEnum.Issuer, configuration["TEC:Adfs:Issuer"] },
+        { TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingEnum.AllowedAudience, configuration.GetSection("TEC:Adfs:AllowedAudience").Get<string[]>() },
+        { TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingEnum.CertificationPath, configuration.GetSection("TEC:Adfs:SigningCertPath").Get<string[]>() },
     };
 });
 builder.Services.AddScoped(serviceProvider =>

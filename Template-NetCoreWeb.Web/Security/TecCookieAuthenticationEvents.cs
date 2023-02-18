@@ -19,11 +19,11 @@ public class TecCookieAuthenticationEvents : CookieAuthenticationEvents
     /// 初始化 TEC 內部服務專用的 Cookie 認證事件
     /// </summary>
     /// <param name="api003AccountApiHandler">用於更新 Access Token 的 API</param>
-    /// <param name="authSettingCollection">用於驗證授權的資料</param>
-    public TecCookieAuthenticationEvents(Api003AccountApiHandler api003AccountApiHandler, AuthSettingCollection authSettingCollection)
+    /// <param name="tokenAuthSettingCollection">用於驗證授權的資料</param>
+    public TecCookieAuthenticationEvents(Api003AccountApiHandler api003AccountApiHandler, TokenAuthSettingCollection tokenAuthSettingCollection)
     {
         this.Api003AccountApiHandler = api003AccountApiHandler ?? throw new ArgumentNullException(nameof(api003AccountApiHandler));
-        this.AuthSettingCollection = authSettingCollection ?? throw new ArgumentNullException(nameof(authSettingCollection));
+        this.TokenAuthSettingCollection = tokenAuthSettingCollection ?? throw new ArgumentNullException(nameof(tokenAuthSettingCollection));
     }
     public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
     {
@@ -49,7 +49,7 @@ public class TecCookieAuthenticationEvents : CookieAuthenticationEvents
         bool shouldRenewToken = false;
         try
         {
-            AccountCliamsInfo accountCliamsInfo = TEC.Internal.Web.Core.Security.AuthHelper.ParseAccountCliamsInfo(accessToken, this.AuthSettingCollection);
+            AccountCliamsInfo accountCliamsInfo = TEC.Internal.Web.Core.Security.AuthHelper.ParseAccountCliamsInfo(accessToken, this.TokenAuthSettingCollection);
             if (DateTimeOffset.FromUnixTimeSeconds(accountCliamsInfo.Exp).ToLocalTime().Subtract(DateTimeOffset.Now).TotalMinutes < 5d)
             {
                 //剩下小於 5 分鐘內過期，要更新 Token
@@ -95,5 +95,5 @@ public class TecCookieAuthenticationEvents : CookieAuthenticationEvents
     /// <summary>
     /// 取得認證資料設定檔集合 
     /// </summary>
-    private AuthSettingCollection AuthSettingCollection { get; }
+    private TokenAuthSettingCollection TokenAuthSettingCollection { get; }
 }
