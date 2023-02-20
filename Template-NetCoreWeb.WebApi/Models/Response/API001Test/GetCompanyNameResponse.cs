@@ -15,5 +15,5 @@ public class GetCompanyNameResponse : ResponseBase<ResultCodeSettingEnum>
     /// <summary>
     /// 設定或取得公司名稱
     /// </summary>
-    public string? ComapnyName { get; set; }
+    public string? CompanyName { get; set; }
 }

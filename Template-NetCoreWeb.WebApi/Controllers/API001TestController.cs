@@ -32,7 +32,7 @@ public class API001TestController : ControllerBase
     {
         return await Task.FromResult(new GetCompanyNameResponse()
         {
-            ComapnyName = "TEC Digital Technology Inc."
+            CompanyName = "TEC Digital Technology Inc."
         });
     }
     /// <summary>

@@ -15,7 +15,7 @@ namespace Template_NetCoreWeb.Core.Logging;
 /// </summary>
 /// <typeparam name="TClient">SoapClient 的類別</typeparam>
 /// <typeparam name="TChannel">SoapClient 上的 Chennel 的類別</typeparam>
-public class LoggerFactoryLoggingSoapManagerBase<TClient, TChannel> : LoggingSoapManagerBase<TClient, TChannel, LoggingSystemScope>, IRequireLoggerFactory
+public class LoggerFactoryLoggingSoapManagerBase<TClient, TChannel> : LoggingSoapManagerBase<TClient, TChannel, LoggingSystemScope>, IRequiredLoggerFactory
     where TClient : ClientBase<TChannel>, new()
     where TChannel : class
 {

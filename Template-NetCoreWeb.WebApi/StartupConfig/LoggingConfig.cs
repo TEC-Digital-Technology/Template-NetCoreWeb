@@ -139,9 +139,9 @@ internal static class LoggingConfig
     #region HTTP Client Handler
     internal static void LoggingHttpClientHandler_LogHttpRequest(object? sender, LogHttpRequestEventArgs<LoggingSystemScope> e)
     {
-        if (sender is not IRequireLoggerFactory requiredLoggerFactory)
+        if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
         {
-            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
+            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
         }
         TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
         requiredLoggerFactory.LoggerFactory.Log(new LogState()
@@ -162,9 +162,9 @@ internal static class LoggingConfig
     }
     internal static void LoggingHttpClientHandler_LogHttpResponse(object? sender, LogHttpResponseEventArgs<LoggingSystemScope> e)
     {
-        if (sender is not IRequireLoggerFactory requiredLoggerFactory)
+        if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
         {
-            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
+            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
         }
         TEC.Core.Logging.Http.HttpResponseEventData httpResponseEventData = e.Response.ToEventData();
         requiredLoggerFactory.LoggerFactory.Log(new LogState()
@@ -185,9 +185,9 @@ internal static class LoggingConfig
     }
     internal static void LoggingHttpClientHandler_LogHttpError(object? sender, LogHttpErrorEventArgs<LoggingSystemScope> e)
     {
-        if (sender is not IRequireLoggerFactory requiredLoggerFactory)
+        if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
         {
-            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
+            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
         }
         TEC.Core.Logging.Http.HttpRequestEventData httpRequestEventData = e.Request.ToEventData();
         requiredLoggerFactory.LoggerFactory.Log(new LogState()
@@ -210,9 +210,9 @@ internal static class LoggingConfig
     #region UIData
     public static void UIData_LoggingAction(object sender, DataModifiedEventArgs e)
     {
-        if (sender is not IRequireLoggerFactory requiredLoggerFactory)
+        if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
         {
-            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
+            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
         }
         var logState = new LogState()
         {
@@ -250,9 +250,9 @@ internal static class LoggingConfig
     #region SOAP
     public static void SoapLoggingManager_LogSoapResponse(object sender, LogSoapResponseEventArgs<LoggingSystemScope> e)
     {
-        if (sender is not IRequireLoggerFactory requiredLoggerFactory)
+        if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
         {
-            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
+            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
         }
         SoapEventData responseSoapData = e.Response.ToEventData();
         var logState = new LogState()
@@ -274,9 +274,9 @@ internal static class LoggingConfig
     }
     public static void SoapLoggingManager_LogSoapRequest(object sender, LogSoapRequestEventArgs<LoggingSystemScope> e)
     {
-        if (sender is not IRequireLoggerFactory requiredLoggerFactory)
+        if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
         {
-            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
+            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
         }
         SoapEventData requestSoapData = e.Request.ToEventData();
         var logState = new LogState()
@@ -298,9 +298,9 @@ internal static class LoggingConfig
     }
     public static void SoapLoggingManager_LogSoapError(object sender, LogSoapErrorEventArgs<LoggingSystemScope> e)
     {
-        if (sender is not IRequireLoggerFactory requiredLoggerFactory)
+        if (sender is not IRequiredLoggerFactory requiredLoggerFactory)
         {
-            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequireLoggerFactory).FullName} 介面", nameof(sender));
+            throw new ArgumentException($"觸發事件的物件型別必須實作 {typeof(IRequiredLoggerFactory).FullName} 介面", nameof(sender));
         }
         SoapEventData errorSoapData = e.Request.ToEventData();
         var logState = new LogState()
