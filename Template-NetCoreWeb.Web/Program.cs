@@ -172,11 +172,8 @@ app.UseAuthorization();
 
 app.UseSession();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
+app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-});
 
 app.Run();

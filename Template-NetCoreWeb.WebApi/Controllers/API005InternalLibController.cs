@@ -21,6 +21,9 @@ namespace Template_NetCoreWeb.WebApi.Controllers;
 [Route("api/[controller]/[action]")]
 public class API005InternalLibController : ControllerBase
 {
+    /// <summary>
+    /// 初始化 API-005 Internal Libraries 控制器
+    /// </summary>
     public API005InternalLibController(TEC.Internal.Web.AccountService.S001AccountApiHandler accountApiHandler)
     {
         this.AccountApiHandler = accountApiHandler ?? throw new ArgumentNullException(nameof(accountApiHandler));

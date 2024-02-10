@@ -18,6 +18,9 @@ namespace Template_NetCoreWeb.WebApi.Controllers;
 [Route("api/[controller]/[action]")]
 public class API001TestController : ControllerBase
 {
+    /// <summary>
+    /// 初始化 API-001 測試控制器
+    /// </summary>
     public API001TestController(ILoggerFactory loggerFactory)
     {
         this.LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));

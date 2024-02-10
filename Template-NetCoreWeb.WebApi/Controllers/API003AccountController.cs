@@ -24,6 +24,9 @@ namespace Template_NetCoreWeb.WebApi.Controllers;
 [Route("api/[controller]/[action]")]
 public class API003AccountController : ControllerBase
 {
+    /// <summary>
+    /// 初始化 API-003 帳號控制器
+    /// </summary>
     public API003AccountController(AccountUIData accountUIData, ClientApplicationSettingCollection clientApplicationSettingCollection,
         IConfidentialClientApplication confidentialClientApplication)
     {

@@ -16,7 +16,7 @@ public class AuthorizedRequiredController : Controller
 
     public async Task<IActionResult> Index()
     {
-        return base.View();
+        return await Task.FromResult(base.View());
     }
 
     /// <summary>

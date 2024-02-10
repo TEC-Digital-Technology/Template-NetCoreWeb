@@ -16,7 +16,7 @@ public static class InternalLibrariesConfig
         serviceCollection.AddHttpClient<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Api003AccountApiHandler>((serviceProvider, httpClient) =>
         {
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            httpClient.BaseAddress = new Uri(configuration["TEC:InternalWeb:ServiceLocation:TemplateNetCoreWeb.WebApi"]);
+            httpClient.BaseAddress = new Uri(configuration["TEC:InternalWeb:ServiceLocation:TemplateNetCoreWeb.WebApi"]!);
         }).ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.NetCoreDemoLoggingHttpClientHandler>();
     }
 }

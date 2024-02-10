@@ -198,7 +198,7 @@ app.UseSwaggerUI(options =>
 app.MapGet("", (context) =>
 {
     context.Response.Redirect("/swagger", permanent: false);
-    return Task.FromResult(0);
+    return Task.CompletedTask;
 });
 #endregion
 #endregion

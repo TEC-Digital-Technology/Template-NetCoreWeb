@@ -21,6 +21,9 @@ namespace Template_NetCoreWeb.WebApi.Controllers;
 [Route("api/[controller]/[action]")]
 public class API004SoapController : ControllerBase
 {
+    /// <summary>
+    /// 初始化 API-004 SOAP 控制器
+    /// </summary>
     public API004SoapController(SoapDemoLoggingManager soapDemoLoggingManager)
     {
         this.SoapDemoLoggingManager = soapDemoLoggingManager ?? throw new ArgumentNullException(nameof(soapDemoLoggingManager));

@@ -11,12 +11,21 @@ using Template_NetCoreWeb.Utils.Enums;
 
 namespace Template_NetCoreWeb.StartupConfig;
 
+/// <summary>
+/// API 架構的回應訊息定義
+/// </summary>
 public class ResultDefinition : IResultDefinition<ResultCodeSettingEnum>
 {
+    /// <summary>
+    /// 初始化 API 架構的回應訊息定義
+    /// </summary>
+    /// <param name="memoryCache">用於儲存訊息的記憶體快取</param>
+    /// <exception cref="ArgumentNullException">當 <paramref name="memoryCache"/> 為 <c>null</c> 時擲出</exception>
     public ResultDefinition(MemoryCache memoryCache)
     {
         this.MemoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
     }
+    /// <inheritdoc/>
     public Func<CachedValueConfig<ResultCodeSettingCollection<ResultCodeSettingEnum>>> GetSpecificCultureResultCodeCachedValueConfig(string cultureKey)
     {
 #warning 本範例寫死不同區域皆回傳相同語系的訊息，實際上應該要針對不同語系回傳該語系的資料
@@ -38,13 +47,19 @@ public class ResultDefinition : IResultDefinition<ResultCodeSettingEnum>
             });
         });
     }
+    /// <inheritdoc/>
     public ResultCodeSettingEnum DefaultResultCode => ResultCodeSettingEnum.Success;
+    /// <inheritdoc/>
     public ResultCodeSettingEnum DefaultExceptionResultCode => ResultCodeSettingEnum.SystemError;
+    /// <inheritdoc/>
     public MemoryCache MemoryCache { private set; get; }
+    /// <inheritdoc/>
     public List<CultureInfo> SupportedCultureInfoList => new List<CultureInfo>()
     {
         new CultureInfo("zh")
     };
+    /// <inheritdoc/>
     public CultureInfo DefaultCultureInfo => new CultureInfo("zh");
+    /// <inheritdoc/>
     public ResultCodeSettingEnum InvalidArgumentResultCode => ResultCodeSettingEnum.InvalidArgument;
 }
