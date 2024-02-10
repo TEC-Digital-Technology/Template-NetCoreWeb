@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using TEC.Core.Web;
-using TEC.Core.Web.Logging;
+using TEC.Core.Logging;
 using Template_NetCoreWeb.Utils.Enums.Logging;
 using Template_NetCoreWeb.Utils.Logging;
 

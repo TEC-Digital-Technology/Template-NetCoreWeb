@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
+using Template_NetCoreWeb.Utils.Enums.Logging;
 using Template_NetCoreWeb.Utils.Enums.Settings;
+using Template_NetCoreWeb.Utils.Logging;
 using Template_NetCoreWeb.WebMvc.Settings;
 using Template_NetCoreWeb.WebMvc.StartupConfig;
 
@@ -27,6 +29,9 @@ builder.Services.AddLog4NetLoggingConfiguration<
             log4net.Config.XmlConfigurator.Configure(repository, new FileInfo("log4net_api.config"));
         };
     });
+builder.Logging.AddTECLoggingConsoleFormatter<LogState, LoggingScope, LoggingSystemScope, LoggingMessageType>(options =>
+{
+});
 #endregion
 #region HTTP Handlers
 //HttpClientHandler 生命週期會由 AddHttpClient 控制，在此的 AddScope 可以支援從 ServiceProvider 取得 SettingCollection 的功能
@@ -50,16 +55,6 @@ builder.Services.AddHttpClient<Template_NetCoreWeb.Core.UIData.ThirdParty.TECApi
     .ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
 #endregion
 #region Internal Libraries
-builder.Services.AddScoped(serviceProvider => 
-{
-    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-    return new TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingCollection()
-    {
-        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingEnum.ClientName, configuration["TEC:InternalWeb:ApiClientSetting:ClientName"] },
-        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingEnum.CryptionIv, configuration["TEC:InternalWeb:ApiClientSetting:CryptionIv"] },
-        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiClientSettingEnum.CryptionKey, configuration["TEC:InternalWeb:ApiClientSetting:CryptionKey"] },
-    };
-});
 builder.Services.AddScoped(serviceProvider =>
 {
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
@@ -78,9 +73,9 @@ builder.Services.AddScoped(serviceProvider =>
     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
     return new TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingCollection()
     {
-        { TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingEnum.Issuer, configuration["TEC:Adfs:Issuer"] },
-        { TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingEnum.AllowedAudience, configuration.GetSection("TEC:Adfs:AllowedAudience").Get<string[]>() },
-        { TEC.Internal.Web.Core.Security.Settings.TokenAuthSettingEnum.CertificationPath, configuration.GetSection("TEC:Adfs:SigningCertPath").Get<string[]>() },
+        { TEC.Internal.Web.Core.Enums.Settings.TokenAuthSettingEnum.Issuer, configuration["TEC:Adfs:Issuer"] },
+        { TEC.Internal.Web.Core.Enums.Settings.TokenAuthSettingEnum.AllowedAudience, configuration.GetSection("TEC:Adfs:AllowedAudience").Get<string[]>() },
+        { TEC.Internal.Web.Core.Enums.Settings.TokenAuthSettingEnum.CertificationPath, configuration.GetSection("TEC:Adfs:SigningCertPath").Get<string[]>() },
     };
 });
 builder.Services.AddScoped(serviceProvider =>

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using TEC.Core.DataAnnotations;
-using TEC.Core.Web.Logging;
+using TEC.Core.Logging;
 using Template_NetCoreWeb.Utils.Enums.Logging;
 
 namespace Template_NetCoreWeb.WebApi.Models.Request.API002Logging;

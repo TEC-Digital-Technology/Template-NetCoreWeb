@@ -1,5 +1,5 @@
 ﻿using TEC.Core.Logging.Http;
-using TEC.Core.Web.Logging;
+using TEC.Core.Logging;
 using Template_NetCoreWeb.Core.Logging;
 using Template_NetCoreWeb.Utils.Enums.Logging;
 using Template_NetCoreWeb.Utils.Logging;

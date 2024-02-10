@@ -11,6 +11,6 @@ namespace Template_NetCoreWeb.Utils.Logging;
 /// <summary>
 /// 描述一筆記錄檔資料
 /// </summary>
-public class LogState : TEC.Core.Web.Logging.LogStateBase<LoggingScope, LoggingSystemScope, LoggingMessageType>
+public class LogState : TEC.Core.Logging.LogStateBase<LoggingScope, LoggingSystemScope, LoggingMessageType>
 {
 }

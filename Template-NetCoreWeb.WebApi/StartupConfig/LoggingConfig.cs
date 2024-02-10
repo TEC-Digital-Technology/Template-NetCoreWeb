@@ -1,7 +1,7 @@
 ﻿using TEC.Core.Logging.Http;
 using TEC.Core.Logging.Soap;
 using TEC.Core.Logging.UIData;
-using TEC.Core.Web.Logging;
+using TEC.Core.Logging;
 using Template_NetCoreWeb.Core.Logging;
 using Template_NetCoreWeb.Core.UIData;
 using Template_NetCoreWeb.Utils.Enums.Logging;
