@@ -132,8 +132,35 @@ builder.Services.AddScoped<Microsoft.Identity.Client.IConfidentialClientApplicat
                   .WithCacheOptions(new Microsoft.Identity.Client.CacheOptions(true))
                   .Build();
     //當 API 有多個站台時，需要共用同一個 Token Cache(可以使用 Redis 或 SQL Server)，取消註解以下方法並實作之
-    //result.UserTokenCache.SetAfterAccessAsync();
-    //result.UserTokenCache.SetBeforeAccessAsync();
+    ////package: Microsoft.Identity.Web.TokenCache
+    //result.AddDistributedTokenCache(services =>
+    //{
+    //    //package: Microsoft.Extensions.Caching.StackExchangeRedis
+    //    services.AddStackExchangeRedisCache(options =>
+    //    {
+    //        options.Configuration = builder.Configuration["TEC:TokenCache:RedisConnectionString"];
+    //        options.InstanceName = builder.Configuration["TEC:TokenCache:KeyPrefix"];
+    //    }).AddDataProtection()
+    //        .SetApplicationName(builder.Configuration["Security:DataProtection:ApplicationName"]!)
+    //        .SetDefaultKeyLifetime(TimeSpan.FromDays(90))//the same as default value
+    //        .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["Security:DataProtection:AzureBlobStorage:UriWithSAS"]!));
+    //    services.Configure<MsalDistributedTokenCacheAdapterOptions>(options =>
+    //    {
+    //        options.DisableL1Cache = true;
+    //        // You can choose if you encrypt or not encrypt the cache
+    //        options.Encrypt = true;
+    //        // And you can set eviction policies for the distributed cache.
+    //        options.SlidingExpiration = TimeSpan.FromDays(30);
+    //        options.OnL2CacheFailure = (ex) =>
+    //        {
+    //            if (ex is StackExchange.Redis.RedisConnectionException)
+    //            {
+    //                return true;
+    //            }
+    //            return false;
+    //        };
+    //    });
+    //});
     return result;
 });
 #endregion
