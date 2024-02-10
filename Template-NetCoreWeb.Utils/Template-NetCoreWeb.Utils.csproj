@@ -1,17 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Template_NetCoreWeb.Utils</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <LangVersion>11.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TEC_Core_Logging_Standard_Library" Version="1.2.0" />
-    <PackageReference Include="TEC_Core_Standard_Library" Version="1.2.9" />
-    <PackageReference Include="TEC_Core_Web_Standard_Library" Version="1.2.1" />
-    <PackageReference Include="TEC_Logging_Log4Net_Standard_Library" Version="1.1.3" />
+    <PackageReference Include="TEC_Core_Logging_Standard_Library" Version="1.4.1" />
+    <PackageReference Include="TEC_Core_Standard_Library" Version="1.4.4" />
+    <PackageReference Include="TEC_Core_Web_Standard_Library" Version="1.4.1" />
+    <PackageReference Include="TEC_Logging_Log4Net_Standard_Library" Version="1.1.5" />
   </ItemGroup>
 
 </Project>

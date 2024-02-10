@@ -1,6 +1,7 @@
-
-using TEC.Core.Logging.Http;
 using Template_NetCoreWeb.Utils.Enums.Logging;
+using Template_NetCoreWeb.Utils.Logging;
+using Template_NetCoreWeb.WebApi.Settings;
+using Template_NetCoreWeb.WebApi.StartupConfig;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +54,7 @@ builder.Services.AddScoped(typeof(Template_NetCoreWeb.Core.Logging.HttpHandlers.
     handler.LogHttpResponse += Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.LoggingHttpClientHandler_LogHttpResponse;
     return handler;
 });
-builder.Services.AddHttpClient<Template_NetCoreWeb.Core.UIData.ThirdParty.TEC.TecApiHandler>()
+builder.Services.AddHttpClient<Template_NetCoreWeb.Core.UIData.ThirdParty.TECApi.TecApiHandler>()
     .ConfigurePrimaryHttpMessageHandler<Template_NetCoreWeb.Core.Logging.HttpHandlers.TECLoggingHttpClientHandler>();
 #endregion
 #region SOAP
@@ -96,12 +97,84 @@ Enum.GetValues<Template_NetCoreWeb.Utils.Enums.Logging.LoggingScope>()
             };
         });
     });
+builder.Logging.AddTECLoggingConsoleFormatter<LogState, LoggingScope, LoggingSystemScope, LoggingMessageType>(options =>
+{
+});
+#endregion
+#region Internal Libraries
+builder.Services.AddScoped(serviceProvider =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    return new TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingCollection()
+    {
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingEnum.DefaultExpectedResultCode, configuration["TEC:InternalWeb:ApiResultSetting:DefaultExpectedResultCode"] },
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingEnum.ResultCodeKey, configuration["TEC:InternalWeb:ApiResultSetting:ResultCodeKey"] },
+        { TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingEnum.ResultMessageKey, configuration["TEC:InternalWeb:ApiResultSetting:ResultMessageKey"] },
+    };
+});
+builder.Services.ConfigureAccountService();
+#endregion
+#region ADFS
+builder.Services.AddScoped(serviceProvider =>
+{
+    var provider = new TEC.Core.Settings.Providers.ConfigurationSettingProvider<ClientApplicationSettingCollection, Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum, string>(serviceProvider.GetRequiredService<IConfiguration>());
+    return (ClientApplicationSettingCollection)provider.Load();
+});
+builder.Services.AddScoped<Microsoft.Identity.Client.IConfidentialClientApplication>(serviceProvider =>
+{
+    var clientApplicationSettingCollection = serviceProvider.GetRequiredService<ClientApplicationSettingCollection>();
+    Uri redirectUri = new Uri((Uri)clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.FrontendBaseUrl], "/Auth/OAuth");
+    Microsoft.Identity.Client.IConfidentialClientApplication result = Microsoft.Identity.Client.ConfidentialClientApplicationBuilder.Create(clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.ClientId].ToString())
+                  .WithAdfsAuthority(clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.Authority].ToString(), true)
+                  .WithRedirectUri(redirectUri.AbsoluteUri)
+                  .WithClientSecret(clientApplicationSettingCollection[Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum.ClientSecret].ToString())
+                  //當共用外部 Token Cache 時，需要去掉下一行
+                  .WithCacheOptions(new Microsoft.Identity.Client.CacheOptions(true))
+                  .Build();
+    //當 API 有多個站台時，需要共用同一個 Token Cache(可以使用 Redis 或 SQL Server)，取消註解以下方法並實作之
+    ////package: Microsoft.Identity.Web.TokenCache
+    //result.AddDistributedTokenCache(services =>
+    //{
+    //    //package: Microsoft.Extensions.Caching.StackExchangeRedis
+    //    services.AddStackExchangeRedisCache(options =>
+    //    {
+    //        options.Configuration = builder.Configuration["TEC:TokenCache:RedisConnectionString"];
+    //        options.InstanceName = builder.Configuration["TEC:TokenCache:KeyPrefix"];
+    //    }).AddDataProtection()
+    //        .SetApplicationName(builder.Configuration["Security:DataProtection:ApplicationName"]!)
+    //        .SetDefaultKeyLifetime(TimeSpan.FromDays(90))//the same as default value
+    //        .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["Security:DataProtection:AzureBlobStorage:UriWithSAS"]!));
+    //    services.Configure<MsalDistributedTokenCacheAdapterOptions>(options =>
+    //    {
+    //        options.DisableL1Cache = true;
+    //        // You can choose if you encrypt or not encrypt the cache
+    //        options.Encrypt = true;
+    //        // And you can set eviction policies for the distributed cache.
+    //        options.SlidingExpiration = TimeSpan.FromDays(30);
+    //        options.OnL2CacheFailure = (ex) =>
+    //        {
+    //            if (ex is StackExchange.Redis.RedisConnectionException)
+    //            {
+    //                return true;
+    //            }
+    //            return false;
+    //        };
+    //    });
+    //});
+    return result;
+});
 #endregion
 #region UIData
 builder.Services.AddScoped<Template_NetCoreWeb.Core.UIData.AccountUIData>();
 #endregion
 #endregion
-
+#region Data Protection
+//builder.Services.AddDataProtection()
+//        .SetApplicationName("netcoredemo.tecyt.com.applocal")
+//        .SetDefaultKeyLifetime(TimeSpan.FromDays(90))//the same as default value
+//        .PersistKeysToAzureBlobStorage(new Uri("https://xxx.blob.core.windows.net/demo-dev/keys.xml?sp=racwl&st=2022-06-25T09:46:00Z&se=2022-07-25T17:46:00Z&sip=125.227.223.156&spr=https&sv=2021-06-08&sr=c&sig=xxxxxxxxxxxxx"))
+//        .ProtectKeysWithCertificate("the thumbnail of the certificate");//Must install the certificate with private key into Key Store#endregion
+#endregion
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
