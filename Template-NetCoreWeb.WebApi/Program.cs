@@ -184,7 +184,7 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 app.ConfigureHttpContext();
 app.UseRouting();
-app.UseTecApiMechanism<Template_NetCoreWeb.Utils.Enums.ResultCodeSettingEnum>("api/{controller}/{action}", app.Environment.IsDevelopment());
+app.UseTecApiMechanism<Template_NetCoreWeb.Utils.Enums.ResultCodeSettingEnum>(["api/{controller}/{action}"], app.Environment.IsDevelopment());
 #region Logging
 app.ConfigureLogging(options => Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.ConfigureBasicLogging(options));
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder => appBuilder.ConfigureLogging(options => Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.ConfigureLogging(options)));

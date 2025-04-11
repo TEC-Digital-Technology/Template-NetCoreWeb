@@ -1,12 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
 using TEC.Core.Web;
 using TEC.Core.Logging;
 using Template_NetCoreWeb.Utils.Enums.Logging;
