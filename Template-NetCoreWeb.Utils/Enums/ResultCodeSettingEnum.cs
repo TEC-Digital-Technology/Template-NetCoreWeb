@@ -50,6 +50,21 @@ public enum ResultCodeSettingEnum
     /// </summary>
     [EnumDescription("1002")]
     ItemRequired,
+    /// <summary>
+    /// 認證失敗，相關訊息：{0}
+    /// </summary>
+    [EnumDescription("1003")]
+    AuthenticationFailed,
+    /// <summary>
+    /// 必須輸入認證資訊
+    /// </summary>
+    [EnumDescription("1004")]
+    AuthenticationRequired,
+    /// <summary>
+    /// 授權發生錯誤，詳細資料請參考相關訊息：{0}
+    /// </summary>
+    [EnumDescription("1005")]
+    AuthorizationFailed,
     #endregion
     /// <summary>
     /// 系統錯誤

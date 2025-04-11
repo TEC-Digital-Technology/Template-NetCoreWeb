@@ -36,6 +36,9 @@ public class ResultDefinition : IResultDefinition<ResultCodeSettingEnum>
             resultCodeSettingCollection[ResultCodeSettingEnum.InvalidArgument] = "參數驗證錯誤";
             resultCodeSettingCollection[ResultCodeSettingEnum.InvalidRange] = "無效的參數區間";
             resultCodeSettingCollection[ResultCodeSettingEnum.ItemRequired] = "必須要有至少一個元素";
+            resultCodeSettingCollection[ResultCodeSettingEnum.AuthenticationFailed] = "認證失敗，相關訊息：{0}";
+            resultCodeSettingCollection[ResultCodeSettingEnum.AuthenticationRequired] = "必須輸入認證資訊";
+            resultCodeSettingCollection[ResultCodeSettingEnum.AuthorizationFailed] = "授權發生錯誤，詳細資料請參考相關訊息：{0}";
             resultCodeSettingCollection[ResultCodeSettingEnum.SilentTokenAcquisitionFailed] = "無法背景更新 Token";
             resultCodeSettingCollection[ResultCodeSettingEnum.Success] = "成功";
             resultCodeSettingCollection[ResultCodeSettingEnum.SystemError] = "系統發生未預期的錯誤";

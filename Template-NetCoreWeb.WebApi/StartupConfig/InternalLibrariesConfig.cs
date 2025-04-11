@@ -10,10 +10,10 @@ namespace Template_NetCoreWeb.WebApi.StartupConfig;
 public static class InternalLibrariesConfig
 {
     /// <summary>
-    /// 初始化 AccountService 介接物件
+    /// 初始化 TEC 內部服務介接設定
     /// </summary>
     /// <param name="serviceCollection"></param>
-    public static void ConfigureAccountService(this IServiceCollection serviceCollection)
+    public static void ConfigureInternalLibraries(this IServiceCollection serviceCollection)
     {
         //AccountService
         Assembly.GetAssembly(typeof(TEC.Internal.Web.AccountService.F001AccountApiHandler))!.GetTypes()

@@ -112,9 +112,10 @@ builder.Services.AddScoped(serviceProvider =>
         { TEC.Internal.Web.Core.ApiProxy.Settings.ApiResultSettingEnum.ResultMessageKey, configuration["TEC:InternalWeb:ApiResultSetting:ResultMessageKey"] },
     };
 });
-builder.Services.ConfigureAccountService();
+builder.Services.ConfigureInternalLibraries();
 #endregion
 #region ADFS
+builder.ConfigureAuth();
 builder.Services.AddScoped(serviceProvider =>
 {
     var provider = new TEC.Core.Settings.Providers.ConfigurationSettingProvider<ClientApplicationSettingCollection, Template_NetCoreWeb.Utils.Enums.Settings.ClientApplicationSettingEnum, string>(serviceProvider.GetRequiredService<IConfiguration>());
@@ -181,12 +182,15 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 #region TEC
+app.UseTecApiMechanism<Template_NetCoreWeb.Utils.Enums.ResultCodeSettingEnum>(["api/{controller}/{action}"], app.Environment.IsDevelopment(), ExceptionConfig.ResultFormat);
 app.MapControllers();
+app.RemoveExcludedOnEnvironment(app.Environment);
 app.ConfigureHttpContext();
 app.UseRouting();
-app.UseTecApiMechanism<Template_NetCoreWeb.Utils.Enums.ResultCodeSettingEnum>(["api/{controller}/{action}"], app.Environment.IsDevelopment());
 #region Logging
 app.ConfigureLogging(options => Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.ConfigureBasicLogging(options));
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder => appBuilder.ConfigureLogging(options => Template_NetCoreWeb.WebApi.StartupConfig.LoggingConfig.ConfigureLogging(options)));
 #endregion
 #region Swagger
@@ -203,4 +207,4 @@ app.MapGet("", (context) =>
 #endregion
 #endregion
 
-app.Run();
+await app.RunAsync();

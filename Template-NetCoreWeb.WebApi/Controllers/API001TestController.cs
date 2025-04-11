@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TEC.Core.Web.Attributes;
 using Template_NetCoreWeb.Utils.Enums;
 using Template_NetCoreWeb.WebApi.Exceptions;
 using Template_NetCoreWeb.WebApi.Models.Request.API001Test;
@@ -16,6 +17,7 @@ namespace Template_NetCoreWeb.WebApi.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Route("api/[controller]/[action]")]
+[AvailableOnEnvironments(Const.developmentEnvironmentName)]
 public class API001TestController : ControllerBase
 {
     /// <summary>

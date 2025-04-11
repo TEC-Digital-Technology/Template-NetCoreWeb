@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Template_NetCoreWeb.WebApi.Controllers;
 [ApiController]
 [Produces("application/json")]
 [Route("api/[controller]/[action]")]
+[Authorize(Const.frontendAudiencePolicyName)]
 public class API005InternalLibController : ControllerBase
 {
     /// <summary>
