@@ -37,7 +37,7 @@ public class API003AccountController : ControllerBase
     /// <summary>
     /// 新增帳號
     /// </summary>
-    /// <param name="addAccountRequest">取得公司名稱的請求</param>
+    /// <param name="addAccountRequest">新增帳號的請求</param>
     /// <returns></returns>
     [HttpPost]
     public async Task<AddAccountResponse> AddAccount([FromBody] AddAccountRequest addAccountRequest)
@@ -108,6 +108,25 @@ public class API003AccountController : ControllerBase
         acquireTokenSilentResponse.IdToken = authenticationResult.IdToken;
         acquireTokenSilentResponse.TenantId = authenticationResult.TenantId;
         return acquireTokenSilentResponse;
+    }
+
+    /// <summary>
+    /// 登出帳號(不需要登入的情況下，也可以登出)
+    /// </summary>
+    /// <param name="signOutRequest">登出帳號的請求</param>
+    /// <returns></returns>
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<SignOutResponse> SignOut([FromBody] SignOutRequest signOutRequest)
+    {
+        IAccount? account = await this.ConfidentialClientApplication.GetAccountAsync(signOutRequest.HomeAccountId!);
+        if (account is not null)
+        {
+            await this.ConfidentialClientApplication.RemoveAsync(account);
+        }
+        return await Task.FromResult(new SignOutResponse()
+        {
+        });
     }
     /// <summary>
     /// 取得帳號處理物件

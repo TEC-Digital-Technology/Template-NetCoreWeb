@@ -72,8 +72,21 @@ public class Api003AccountApiHandler : ApiHandlerBase
         }, authentication);
         return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.AcquireTokenSilentResponse>()!;
     }
-
+    /// <summary>
+    /// 登出指定的帳號
+    /// </summary>
+    /// <param name="activityId">代表本次活動的 ID</param>
+    /// <param name="homeAccountId">使用者 HomeAccountId</param>
+    /// <returns></returns>
+    public async Task<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.SignOutResponse> SignOutAsync(Guid activityId, string homeAccountId)
+    {
+        JToken returnedJToken = await base.PostAsync(activityId, "api/API003Account/SignOut", new SortedDictionary<string, object>()
+        {
+            {"HomeAccountId",homeAccountId }
+        }, null);
+        return returnedJToken.ToObject<Template_NetCoreWeb.Core.UIData.ThirdParty.NetCoreDemo.Response.SignOutResponse>()!;
+    }
     /// <inheritdoc/>
-    protected override EnvironmentSettingCollection GetEnvironmentSettingCollection(IHostEnvironment hostEnvironment) =>
-        EnvironmentSettingCollectionHelperInernal.GetFrontendEnvironmentSettingCollection(hostEnvironment);
+    protected override EnvironmentSettingCollection GetEnvironmentSettingCollection(IHostEnvironment hostingEnvironment) =>
+        EnvironmentSettingCollectionHelperInernal.GetFrontendEnvironmentSettingCollection(hostingEnvironment);
 }

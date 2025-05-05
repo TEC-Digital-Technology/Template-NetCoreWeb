@@ -34,39 +34,8 @@ public class AuthController : Controller
         this.PersonalDataSettingCollection = personalDataSettingCollection ?? throw new ArgumentNullException(nameof(personalDataSettingCollection));
 
     }
-
     /// <summary>
-    /// 1. 預設 TEC Portal 登入流程
-    /// </summary>
-    /// <param name="redirectPath">登入後跳轉相對位置</param>
-    /// <returns></returns>
-    [HttpGet]
-    public ActionResult SignIn(string redirectPath = "/AuthorizedRequired/Index")
-    {
-        string clientId = this.ClientApplicationSettingCollection[ClientApplicationSettingEnum.ClientId].ToString()!;
-        //以便在完成 TEC Portal 登入流程後，可以導向回原本要瀏覽的位址
-        this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedIn] = redirectPath;
-        UriBuilder uriBuilder = new UriBuilder(this.PortalUri);
-        uriBuilder.Path = "/AccountManagement/TEC/RedirectToSignIn";
-        NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(uriBuilder.Query);
-        nameValueCollection.Add("sourcePlatformServiceId", clientId);
-        uriBuilder.Query = nameValueCollection.ToString();
-        return base.Redirect(uriBuilder.ToString());
-    }
-
-    /// <summary>
-    /// 2. 從 TEC Portal 登入後的跳轉邏輯
-    /// </summary>
-    /// <param name="is_register">是否為全新註冊 TEC 的用戶</param>
-    /// <returns></returns>
-    /// <remarks>這個網址必須與 TEC Portal 的重新導向設定網址相同</remarks>
-    public ActionResult Portal(bool? is_register)
-    {
-        return base.RedirectToAction("OAuthSignIn");
-    }
-
-    /// <summary>
-    /// 3. OAuth 登入流程
+    /// OAuth 登入流程
     /// </summary>
     /// <returns></returns>
     /// <remarks>此時 ADFS 已經是登入狀態，所以重新導向過去，不用再輸入帳密就能完成登入。</remarks>
@@ -127,22 +96,24 @@ public class AuthController : Controller
         return base.Redirect(redirectPath);
     }
     /// <summary>
-    /// 5. 登出系統
+    /// 登出系統
     /// </summary>
     /// <param name="redirectPath"></param>
     /// <returns></returns>
     public async Task<ActionResult> SignOut(string redirectPath = "/Home/Index")
     {
         await base.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        string clientId = this.ClientApplicationSettingCollection[ClientApplicationSettingEnum.ClientId].ToString()!;
+        Claim homeAccountIdClaim = base.HttpContext.User.Claims.Single(t => t.Type == nameof(IAccount.HomeAccountId));
+        await this.Api003AccountApiHandler.SignOutAsync(HttpContextProvider.CurrentActivityId!.Value, homeAccountIdClaim.Value);
+        string signoutUrlFormat = "https://adfs.tecyt.com/adfs/oauth2/logout?id_token_hint={0}&post_logout_redirect_uri={1}";
+        //清除個人設定
+        this.PersonalDataSettingCollection.Clear();
         //以便在完成 TEC Portal 登出流程後，可以導向到登出後要瀏覽的位址
         this.PersonalDataSettingCollection[PersonalDataSettingEnum.RedirectRelativePathWhenLoggedOut] = redirectPath;
-        UriBuilder uriBuilder = new UriBuilder(this.PortalUri);
-        uriBuilder.Path = "/AccountManagement/TEC/SignOut";
-        NameValueCollection nameValueCollection = HttpUtility.ParseQueryString(uriBuilder.Query);
-        nameValueCollection.Add("sourcePlatformServiceId", clientId);
-        uriBuilder.Query = nameValueCollection.ToString();
-        return base.Redirect(uriBuilder.ToString());
+        UriBuilder uriBuilder = new UriBuilder((Uri)this.ClientApplicationSettingCollection[ClientApplicationSettingEnum.FrontendBaseUrl]);
+        uriBuilder.Path = base.Url.Action(nameof(SignedOut), "Auth")!;
+        Claim idTokenClaim = base.HttpContext.User.Claims.Single(t => t.Type == "IdToken");
+        return base.Redirect(String.Format(signoutUrlFormat, idTokenClaim.Value, HttpUtility.UrlEncode(uriBuilder.ToString())));
     }
 
     /// <summary>
@@ -157,21 +128,6 @@ public class AuthController : Controller
             redirectPath = base.Url.Action("Index", "Home")!;
         }
         return base.Redirect(redirectPath);
-    }
-
-    /// <summary>
-    /// 取得 TEC Portal 的 Uri
-    /// </summary>
-    private Uri PortalUri
-    {
-        get
-        {
-#if DEBUG
-            return new Uri("https://portal-dev.tpe.tecyt.com/");
-#else
-            return new Uri("https://portal.tecyt.com/");
-#endif
-        }
     }
 
     /// <summary>
